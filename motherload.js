@@ -120,7 +120,7 @@ let gameStartState = {
     bombCost: 150,
 
 
-    currentLevel: 4,
+    currentLevel: 0,
     floorValues: [
         {
             barVals: [1, 1, 1, 0.997, 0.99, 0.9, 0.65],
