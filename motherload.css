@@ -70,7 +70,7 @@ html, body {
   .map-square {
     /* width: 13.5vw;
     height: 12vh; */
-    width: 10.95vw;
+    width:  10.5vw;
     height: 10vh;
     color: mediumspringgreen;
     transition: background-color 1500ms ease-out;
@@ -239,7 +239,7 @@ html, body {
 
 .player-here {
   position: relative;
-  width: 10.95vw;
+  width:  10.5vw;
   height: 10vh;
 
 }
@@ -318,7 +318,7 @@ html, body {
 
   .bronze-img, .enemy-img, .dirt-img, .stone-img,  .silver-img, .gold-img, .ruby-img, .amethyst-img, .diamond-img, .blkdiamond-img,
   .stone-amethyst-img, .stone-diamond-img, .stone-blkdiamond-img, .crate-img {
-    width: 10.95vw;
+    width:  10.5vw;
     height: 10vh;
     object-fit: cover;
   }
@@ -449,7 +449,7 @@ html, body {
   color: rgb(203, 203, 203);
 }
 
-.sell-button, .ruby-relic-hover, .diamond-relic-hover, .choose-robot-button {
+.sell-button, .ruby-relic-hover, .diamond-relic-hover, .choose-robot-button, .ore-relic-hover {
   width: 30vw;
   height: 5vh;
   display: flex;
@@ -467,7 +467,7 @@ html, body {
   width: 18vw;
 }
 
-.ruby-relic-div, .ore-relic-div {
+.ruby-relic-div, #ore-relic-div {
   height: 6.5vh;
 }
 
@@ -486,7 +486,7 @@ html, body {
   cursor: auto;
 }
 
-.sell-button:hover, .hull-gold-upgrade-hover:hover, .fuel-gold-upgrade-hover:hover, .ruby-relic-hover:hover, .diamond-relic-hover:hover {
+.sell-button:hover, .hull-gold-upgrade-hover:hover, .fuel-gold-upgrade-hover:hover, .ruby-relic-hover:hover,  .ore-relic-hover:hover {
   border: 0.5vh dashed rgb(144, 255, 144);
   height: 5.5vh;
   background: linear-gradient(to right, rgb(31, 125, 31) 0%, rgb(60, 133, 60) 20%, rgb(59, 122, 59) 40%, rgb(80, 126, 80) 70%, rgb(64, 100, 64) 75%, rgb(30, 111, 30));
@@ -549,7 +549,6 @@ body:has(.sell-button:hover) .selling-items-div {
 
 body:has(#store-fuel-div:hover) #empty-fuel-bar {
   background-color: rgba(197, 185, 16, 0.6);
-  animation: flash 1s infinite;
 }
 
 body:has(.hull-gold-upgrade-hover:hover) #empty-hull-bar {
@@ -559,7 +558,6 @@ body:has(.hull-gold-upgrade-hover:hover) #empty-hull-bar {
 
 body:has(.fuel-gold-upgrade-hover:hover) #empty-fuel-bar {
   background-color: rgba(197, 185, 16, 0.6);
-  animation: flash 1s infinite;
 }
 
 body:has(#store-fuel-div:hover) #fuel-opening-text {
@@ -569,7 +567,6 @@ body:has(#store-fuel-div:hover) #fuel-opening-text {
 
 body:has(#store-repair-div:hover) #empty-hull-bar {
   background-color: rgba(201, 20, 20, 0.6);
-  animation: flash 1s infinite;
 }
 
 body:has(.store-clickable#store-bomb-capacity-upgrade-div:hover) #current-bombs-text {
@@ -595,12 +592,6 @@ body:has(.store-clickable#store-fuel-upgrade-div:hover) #max-fuel-text {
   animation: flash 1s infinite;
 }
 
-body:has(.store-clickable#store-fuel-upgrade-div:hover) #empty-fuel-bar,
-body:has(.store-clickable#store-hull-upgrade-div:hover) #empty-hull-bar,
-body:has(.store-clickable#store-inventory-upgrade-div:hover) #empty-inv-bar {
-  -webkit-animation: flash 1s;
-  animation: flash 1s infinite;
-}
 
 body:has(.store-clickable#store-hull-upgrade-div:hover) #hull-integrity-text {
   font-size: 120%;
