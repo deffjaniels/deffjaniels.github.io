@@ -131,7 +131,7 @@ let uncommonRouletteChoices = [
         name: "Cargo Bay +",
         rarity: "uncommon",
         text: "Increase Cargo Bay by 2",
-        value: 1,
+        value: 2,
         rouletteFunc: async (stateObj, value) => {
             stateObj = immer.produce(stateObj, (newState) => {
                 newState.currentInventory += value;
@@ -259,7 +259,7 @@ let legendaryRouletteChoices = [
         name: "Fuel Tank ++++",
         rarity: "legendary",
         text: "Increase Fuel Tank by 20",
-        value: 8,
+        value: 20,
         rouletteFunc: async (stateObj, value) => {
             stateObj = immer.produce(stateObj, (newState) => {
                 newState.fuelTankMax += Math.ceil(value * newState.overallFuelModifier);;
@@ -276,7 +276,7 @@ let legendaryRouletteChoices = [
         name: "Hull Armor +++",
         rarity: "legendary",
         text: "Increase Hull Armor by 20",
-        value: 10,
+        value: 20,
         rouletteFunc: async (stateObj, value) => {
             stateObj = immer.produce(stateObj, (newState) => {
                 newState.hullArmorMax += Math.ceil(value  * newState.overallHullModifier);
@@ -309,7 +309,7 @@ let legendaryRouletteChoices = [
         name: "Valuable Ore++",
         rarity: "legendary",
         text: "Add $200",
-        value: 00,
+        value: 200,
         rouletteFunc: async (stateObj, value) => {
             stateObj = immer.produce(stateObj, (newState) => {
                 newState.bankedCash += value;

@@ -154,7 +154,7 @@ let gameStartState = {
             potentialRelicUpgrades: 0,
         },
         {
-            barVals: [1, 0.9995, 0.998, 0.995, 0.975, 0.9, 0.80],
+            barVals: [1, 0.9995, 0.998, 0.995, 0.975, 0.9, 0.85],
             enemyValue: 0.95,
             numberRows: 30,
             bottomRowEnemies: [0, 3, 7, 9],
@@ -169,7 +169,7 @@ let gameStartState = {
             potentialRelicUpgrades: 1,
         },
         {
-            barVals: [1, 0.999, 0.995, 0.97, 0.9, 0.85, 0.75],
+            barVals: [1, 0.999, 0.995, 0.97, 0.9, 0.85, 0.8],
             enemyValue: 0.93,
             numberRows: 40,
             bottomRowEnemies: [1, 3, 5, 7],
@@ -184,7 +184,7 @@ let gameStartState = {
             potentialRelicUpgrades: 2,
         },
         {
-            barVals: [0.9995, 0.995, 0.98, 0.95, 0.9, 0.8, 0.7],
+            barVals: [0.9995, 0.995, 0.98, 0.95, 0.9, 0.8, 0.75],
             enemyValue: 0.91,
             numberRows: 50,
             screenwidthBlocks: 35,
@@ -199,7 +199,7 @@ let gameStartState = {
             potentialRelicUpgrades: 3,
         },
         {
-            barVals: [0.995, 0.98, 0.95, 0.9, 0.85, 0.77, 0.7],
+            barVals: [0.995, 0.98, 0.95, 0.9, 0.85, 0.77, 0.75],
             enemyValue: 0.88,
             numberRows: 70,
             screenwidthBlocks: 40,
@@ -1428,7 +1428,7 @@ async function RightArrow(stateObj, currentHeight, currentWidth, scrollHeight, s
 async function UpArrow(stateObj, currentHeight, currentWidth, scrollHeight, scrollWidth) {
     let newSquare = stateObj.gameMap[stateObj.currentPosition - stateObj.floorValues[stateObj.currentLevel].screenwidthBlocks]
     if (stateObj.currentPosition > 7 && stateObj.inTransition === false) {
-        if (newSquare=== "empty" || newSquare === "STORE") {
+        if (newSquare=== "empty" || newSquare === "STORE" || newSquare === "teleporter") {
             stateObj = await calculateMoveChange(stateObj, -stateObj.floorValues[stateObj.currentLevel].screenwidthBlocks)
             stateObj = immer.produce(stateObj, (newState) => {
             })
