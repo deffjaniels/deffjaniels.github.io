@@ -581,7 +581,6 @@ body:has(.sell-button:hover) .sell-row {
 
 body:has(.sell-button:hover) .selling-items-div {
   box-shadow: 1vw 1vw 1vw rgba(159, 159, 159, 0.619);
-  animation: flash 1s infinite;
 }
 
 body:has(#store-fuel-div:hover) #empty-fuel-bar {
