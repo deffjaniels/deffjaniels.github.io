@@ -40,7 +40,6 @@ let commonRouletteChoices = [
         value: 1,
         rouletteFunc: async (stateObj, value) => {
             stateObj = immer.produce(stateObj, (newState) => {
-                newState.currentInventory += value;
                 newState.inventoryMax += value;
                 newState.choosingRoulette = false;
             })
@@ -67,7 +66,7 @@ let commonRouletteChoices = [
             await changeState(stateObj);
             return stateObj
         },
-        type: "cargobay"
+        type: "dirt"
     },
 
 ]
@@ -134,7 +133,6 @@ let uncommonRouletteChoices = [
         value: 2,
         rouletteFunc: async (stateObj, value) => {
             stateObj = immer.produce(stateObj, (newState) => {
-                newState.currentInventory += value;
                 newState.inventoryMax += value;
                 newState.choosingRoulette = false;
             })
@@ -223,7 +221,6 @@ let rareRouletteChoices = [
         value: 3,
         rouletteFunc: async (stateObj, value) => {
             stateObj = immer.produce(stateObj, (newState) => {
-                newState.currentInventory += value;
                 newState.inventoryMax += value;
                 newState.choosingRoulette = false;
             })
@@ -295,7 +292,6 @@ let legendaryRouletteChoices = [
         value: 5,
         rouletteFunc: async (stateObj, value) => {
             stateObj = immer.produce(stateObj, (newState) => {
-                newState.currentInventory += value;
                 newState.inventoryMax += value;
                 newState.choosingRoulette = false;
             })
