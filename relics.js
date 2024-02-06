@@ -451,13 +451,13 @@ let potentialRelics = [
         varName: "bombRefillRelic",
         text: (stateObj) => {
             let val = stateObj.bombRefill
-            let tradeString = "Killing an enemy with a bomb refills " + val + "bomb"
+            let tradeString = "Killing an enemy with a bomb refills " + val + " bomb"
             if (val>1) { tradeString += "s"}
             return tradeString
         },
         storeText: (stateObj) => {
             let val = stateObj.bombRefill
-            let tradeString = "Killing an enemy with a bomb refills " + (val+1) + "bomb"
+            let tradeString = "Killing an enemy with a bomb refills " + (val+1) + " bomb"
             if (val>0) { tradeString += "s"}
             return tradeString
         },
@@ -781,12 +781,12 @@ let potentialRelics = [
         name: "Fuel Multiplier",
         varName: "rubyLocator",
         text: (stateObj) => {
-            let val = (1-stateObj.overallFuelModifier)*100;
+            let val = (stateObj.overallFuelModifier - 1)*100;
             let tradeString = "All fuel upgrades are " + Math.floor(val) + "% more powerful "
             return tradeString
         },
         storeText: (stateObj) => {
-            let val = (1-stateObj.overallFuelModifier + 0.5)*100;
+            let val = (stateObj.overallFuelModifier - 1 + 0.5)*100;
             let tradeString = "All fuel upgrades are " + Math.floor(val) + "% more powerful "
             return tradeString
         },
@@ -808,12 +808,12 @@ let potentialRelics = [
         name: "Hull Multiplier",
         varName: "rubyLocator",
         text: (stateObj) => {
-            let val = (1-stateObj.overallHullModifier)*100;
+            let val = (stateObj.overallHullModifier-1)*100;
             let tradeString = "All hull upgrades are " + Math.floor(val) + "% more powerful "
             return tradeString
         },
         storeText: (stateObj) => {
-            let val = (1-stateObj.overallHullModifier + 0.5)*100;
+            let val = (stateObj.overallHullModifier + 0.5 - 1)*100;
             let tradeString = "All hull upgrades are " + Math.floor(val) + "% more powerful "
             return tradeString
         },

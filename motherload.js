@@ -18,6 +18,13 @@ let gameStartState = {
     hullUpgradeCost: 1500,
     takingDamage: false,
 
+    //bounties
+    levelBounty: true,
+    levelDirtMined: 0,
+    levelDirtBlocksDropped: 0,
+    levelOresConverted: 0,
+    levelEnemiesKilled: 0,
+
     //states
     currentPosition: false,
     inStore: false,
@@ -95,6 +102,8 @@ let gameStartState = {
     storeRelic2: false,
     storeRelic3: false,
     storeRelic4: false,
+    killEnemyBounty: true,
+
     
 
     drillTime: 850,
@@ -138,6 +147,7 @@ let gameStartState = {
     currentLevel: 0,
     levelOreLeft: 0,
     totalLevelOre: 0,
+    totalLevelEnemies: 0,
     floorValues: [
         {
             barVals: [1, 1, 1, 0.999, 0.995, 0.95, 0.80],
@@ -157,7 +167,7 @@ let gameStartState = {
         },
         {
             barVals: [1, 0.9995, 0.998, 0.995, 0.975, 0.9, 0.85],
-            enemyValue: 0.95,
+            enemyValue: 0.965,
             numberRows: 30,
             bottomRowEnemies: [0, 3, 7, 9],
             relicNumber: 1,
@@ -172,7 +182,7 @@ let gameStartState = {
         },
         {
             barVals: [1, 0.999, 0.995, 0.97, 0.9, 0.85, 0.8],
-            enemyValue: 0.93,
+            enemyValue: 0.95,
             numberRows: 40,
             bottomRowEnemies: [1, 3, 5, 7],
             relicNumber: 1,
@@ -187,7 +197,7 @@ let gameStartState = {
         },
         {
             barVals: [0.9995, 0.995, 0.98, 0.95, 0.9, 0.8, 0.75],
-            enemyValue: 0.91,
+            enemyValue: 0.935,
             numberRows: 50,
             screenwidthBlocks: 35,
             bottomRowEnemies: [1, 2, 4, 5, 7],
@@ -202,7 +212,7 @@ let gameStartState = {
         },
         {
             barVals: [0.995, 0.98, 0.95, 0.9, 0.85, 0.77, 0.75],
-            enemyValue: 0.88,
+            enemyValue: 0.91,
             numberRows: 70,
             screenwidthBlocks: 40,
             bottomRowEnemies: [1, 2, 4, 5, 7],
@@ -375,12 +385,16 @@ async function fillMapWithArray(stateObj) {
 
         let allowedOreValues = ["1", "2", "3", "4", "stone-5", "stone-6", "stone-7", "5", "6", "7"]
         let totalOres = tempArray.filter(str => allowedOreValues.includes(str))
+        let totalEnemies = tempArray.filter(str => str==="enemy")
     
 
 
         stateObj = await immer.produce(stateObj, (newState) => {
             newState.totalLevelOre = totalOres.length
+            newState.killEnemyBounty = true;
+            newState.totalLevelEnemies = totalEnemies.length
             newState.gameMap = tempArray;
+            newState.storeUpgradeArray = [];
             newState.currentPosition = 2;
             newState.timeCounter += 1
             if (stateObj.levelTeleport === true) {
@@ -443,7 +457,6 @@ async function fillMapWithArray(stateObj) {
     for (let i = 0; i < upgradeNum; i++) {
         let relic = Math.floor(Math.random() * relics.length)
         stateObj = await immer.produce(stateObj, (newState) => {
-            console.log('pushing to upgrade array ' + relics[relic].name)
             newState.storeUpgradeArray.push(relics[relic])
             console.log("newstate array is " + newState.storeUpgradeArray.length)
         })
@@ -1146,7 +1159,7 @@ async function upgradeHull(stateObj, hullCost) {
 
 async function tradeRelicRuby(stateObj) {
     let rubyPrice = stateObj.floorValues[stateObj.currentLevel].rubyRelicPrice
-    let amethystPrice = stateObj.floorValues[stateObj.currentLevel].diamondRelicPrice
+    let amethystPrice = stateObj.floorValues[stateObj.currentLevel].amethystRelicPrice
     if (rubyPrice > 0 && stateObj.rubyInventory >= rubyPrice) {
         stateObj = await stateObj.storeRelic1.relicFunc(stateObj)
         stateObj = immer.produce(stateObj, (newState) => {
@@ -1214,6 +1227,19 @@ async function buyRelic4Func(stateObj) {
     await changeState(stateObj);
 }
 
+async function killEnemiesStoreFunc(stateObj, value) {
+    stateObj = immer.produce(stateObj, (newState) => {
+        newState.killEnemyBounty = false;
+        newState.bankedCash += value;
+
+    })
+    document.querySelector(".kill-enemy-div").classList.add("store-clicked")
+    await pause(300)
+    await changeState(stateObj);
+}
+
+killEnemiesStoreFunc
+
 async function upgradeStoreRelic(stateObj, index, rubyPrice=false, amethystPrice=false) {
     stateObj = await stateObj.storeUpgradeArray[index].relicFunc(stateObj, false)
     stateObj = immer.produce(stateObj, (newState) => {
@@ -1226,7 +1252,6 @@ async function upgradeStoreRelic(stateObj, index, rubyPrice=false, amethystPrice
         }
 
     })
-    document.querySelectorAll(".upgrade-relic-div")[index].classList.add("store-clicked")
     await pause(300)
     await changeState(stateObj);
 }

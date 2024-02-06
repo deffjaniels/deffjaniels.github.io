@@ -139,6 +139,15 @@ html, body {
     display: flex;
     justify-content: center;
     align-items: center;
+    text-align: center;
+  }
+
+  .space-between-column {
+    justify-content: space-between;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
   }
 
   .row {
@@ -438,7 +447,7 @@ html, body {
   width: 50vw;
 }
 
-.selling-items-div, .start-div, .choose-robot-div {
+.selling-items-div, .start-div, .choose-robot-div, .lost-div {
   display: flex;
   flex-direction: column;
   width: 80vw;
@@ -504,7 +513,7 @@ html, body {
   transition: 1s all;
 }
 
-.ruby-relic-div, .ore-relic-div {
+.ruby-relic-div, .ore-relic-div, .kill-enemy-div {
   width: 25vw;
   height: 20vh;
   display: flex;
@@ -535,7 +544,7 @@ html, body {
 }
 
 .choose-robot-button {
-  width: 18vw;
+  height: 19vh;
 }
 
 .hull-gold-upgrade-hover, .fuel-gold-upgrade-hover {
@@ -560,6 +569,10 @@ html, body {
   cursor: pointer;
   font-weight: 1300;
   color: white;
+}
+
+.ruby-relic-hover:hover,  .ore-relic-hover:hover {
+  height: 19vh;
 }
 
 body:has(.hull-gold-upgrade-hover:hover) .gold-sell-row {
@@ -768,6 +781,67 @@ body:has(.store-clickable#store-inventory-upgrade-div:hover) #current-inv-bar  {
     display: flex;
     flex-direction: column;
     transition: 0.4s all;
+  }
+
+  .roulette-option {
+    width: 20vw;
+    height: 25vh;
+    font-size: 1.4vw;
+    background-color: rgba(153, 238, 230, 0.977);
+    margin: 2vw;
+    padding: 1vh;
+    justify-content: space-between;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    transition: 0.4s all;
+    font-family: monospace;
+  }
+
+  .roulette-title {
+    font-size: 1.8vw;
+    width: 100%;
+    padding: 0.5vh 0.2vw;
+  }
+
+  .roulette-rarity {
+    font-size: 1vw;
+    padding: 0.2vh 0.4vw;
+  }
+
+  .roulette-option:hover {
+    background-color: rgba(13, 72, 66, 0.977);
+    width: 18vw;
+    height: 23vh;
+    color: rgba(133, 235, 225, 0.977);
+    cursor: pointer;
+    border: 3px solid rgb(0, 144, 120)
+  }
+
+  .roulette-title-common, .roulette-rarity-common {
+    background-color: rgba(223, 153, 88, 0.797);
+  }
+
+  .roulette-title-uncommon, .roulette-rarity-uncommon {
+    background-color: rgba(187, 187, 187, 0.735);
+  }
+
+  .roulette-title-rare, .roulette-rarity-rare {
+    background-color: rgba(203, 190, 77, 0.735);
+  }
+
+  .roulette-title-legendary, .roulette-rarity-legendary {
+    background-color: rgba(205, 78, 78, 0.735);
+  }
+
+  .roulette-choice-pick {
+    font-size: 5vw;
+    text-align: center;
+    width: 100%;
+    padding: 2vh 2vw;
+    margin: 1vw;
+    color: rgb(226, 253, 255);
+    background-color: rgba(105, 105, 105, 0.605);
   }
 
   .next-level-option {

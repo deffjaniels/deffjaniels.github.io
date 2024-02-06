@@ -421,6 +421,35 @@ function renderSellingItems(stateObj) {
     oreRelicDiv.append (tradeDiv1, tradeImg, tradeDiv2)
   }
 
+  let killEnemiesDiv = document.createElement("Div")
+  if (stateObj.killEnemyBounty && stateObj.floorValues[stateObj.currentLevel].potentialRelicUpgrades < 2) {
+    killEnemiesDiv.classList.add("kill-enemy-div")
+    killEnemiesDiv.classList.add("relic-option")
+    killEnemiesDiv.classList.add("trade-relic-option")
+    killEnemiesDiv.classList.add("column")
+    let currentEnemies = stateObj.gameMap.filter(str => str === "enemy")
+    
+    let tradeDiv1 = document.createElement("Div")
+    let val = (1000*((stateObj.currentLevel+1)*2) * (stateObj.currentLevel+1))
+    let tradeString = "Earn $" + val
+    tradeDiv1.textContent = tradeString
+    tradeDiv1.classList.add("centered")
+
+    let tradeDiv2 = document.createElement("Div")
+    let enemies = stateObj.totalLevelEnemies
+    let tradeString2 = "Kill all enemies to collect: " + (enemies - currentEnemies.length) + "/" + enemies
+    tradeDiv2.textContent = tradeString2
+    tradeDiv2.classList.add("centered")
+
+    if (currentEnemies.length === 0) {
+      killEnemiesDiv.classList.add("ore-relic-hover")
+      killEnemiesDiv.onclick = async function () {
+          await killEnemiesStoreFunc(stateObj, val)
+        }
+    }
+    killEnemiesDiv.append (tradeDiv1, tradeDiv2)
+  }
+
 
 
   let sellButtonDiv = document.createElement("Div")
@@ -477,7 +506,7 @@ function renderSellingItems(stateObj) {
   let tradeRelicsDiv = document.createElement("Div")
   tradeRelicsDiv.classList.add("row")
   tradeRelicsDiv.classList.add("trade-relics-div")
-  tradeRelicsDiv.append(oreRelicDiv, tradeRelicRubyDiv)
+  tradeRelicsDiv.append(oreRelicDiv, tradeRelicRubyDiv, killEnemiesDiv)
 
   let storeArr = stateObj.storeUpgradeArray
   for (let i=0; i < storeArr.length; i++) {
@@ -535,7 +564,7 @@ function lostTheGame() {
   storeDiv.classList.add("store-div")
 
   let lostDiv = document.createElement("Div")
-  lostDiv.classList.add("selling-items-div")
+  lostDiv.classList.add("lost-div")
 
   let lostTextDiv = document.createElement("H3")
   lostTextDiv.textContent = state.lossString
@@ -1318,10 +1347,10 @@ function renderStore(stateObj) {
       
       if ((missingHull*5) * (stateObj.currentLevel+1) > (stateObj.bankedCash * (1-stateObj.cheaperShops))) {
           repairText1.textContent = "Spend all money on repairing Hull Armor" 
-          repairText2.textContent = "$" + Math.ceil(stateObj.bankedCash)* (1-stateObj.cheaperShops)
+          repairText2.textContent = "$" + Math.ceil(stateObj.bankedCash) * (stateObj.currentLevel+1) * (1-stateObj.cheaperShops)
       } else {
           repairText1.textContent = "Repair Hull Armor fully " 
-          repairText2.textContent = "$" +  Math.ceil(missingHull*5  ) * (1-stateObj.cheaperShops)
+          repairText2.textContent = "$" +  Math.ceil(missingHull*5  ) * (stateObj.currentLevel+1) * (1-stateObj.cheaperShops)
       }
       repairText2.classList.add("store-option-text")
       repairDiv.append(repairText1, repairText2)
@@ -1603,58 +1632,52 @@ function renderRouletteChoices(stateObj) {
   let legendThreshold = 0.95
   let rareThreshold = 0.9
   let uncommonThreshold = 0.75
-  if (roulette1Rarity > legendThreshold) {roulette1Array = legendaryArray} 
-  else if (roulette1Rarity > rareThreshold) {roulette1Array = rareArray} 
-  else if (roulette1Rarity > uncommonThreshold) {roulette1Array = uncommonArray} else {roulette1Array = commonArray}
 
-  if (roulette2Rarity > legendThreshold) {roulette2Array = legendaryArray} 
-  else if (roulette2Rarity > rareThreshold) {roulette2Array = rareArray} 
-  else if (roulette2Rarity > uncommonThreshold) {roulette2Array = uncommonArray} else {roulette2Array = commonArray}
+  let titleDiv = document.createElement("Div")
+  titleDiv.classList.add("roulette-choice-pick")
+  titleDiv.textContent = "Choose one"
+  storeDiv.append(titleDiv)
+  
+  for (let i = 0; i < 3; i++) {
+    let roulette1Rarity = Math.random()
+    if (roulette1Rarity > legendThreshold) {roulette1Array = legendaryArray} 
+    else if (roulette1Rarity > rareThreshold) {roulette1Array = rareArray} 
+    else if (roulette1Rarity > uncommonThreshold) {roulette1Array = uncommonArray} else {roulette1Array = commonArray}
 
-  if (roulette3Rarity > legendThreshold) {roulette3Array = legendaryArray} 
-  else if (roulette3Rarity > rareThreshold) {roulette3Array = rareArray} 
-  else if (roulette3Rarity > uncommonThreshold) {roulette3Array = uncommonArray} else {roulette3Array = commonArray}
+    let rouletteNum1 = Math.floor(Math.random() * roulette1Array.length)
+    let rouletteChoice1 = roulette1Array[rouletteNum1]
+    roulette1Array.splice(rouletteNum1, 1)
 
+    let choice1Div = document.createElement("Div")
+    choice1Div.classList.add("roulette-option")
 
+    let choice1Title = document.createElement("Div")
+    choice1Title.classList.add("roulette-title")
+    choice1Title.classList.add("centered")
+    choice1Title.textContent = rouletteChoice1.name
+    let classString = "roulette-title-" + rouletteChoice1.rarity
+    choice1Title.classList.add(classString)
 
-  let rouletteNum1 = Math.floor(Math.random() * roulette1Array.length)
-  let rouletteChoice1 = roulette1Array[rouletteNum1]
-  roulette1Array.splice(rouletteNum1, 1)
+    let choice1Text = document.createElement("Div")
+    choice1Text.classList.add("roulette-text")
+    choice1Text.classList.add("centered")
+    choice1Text.textContent = rouletteChoice1.text(stateObj)
 
+    let choice1Rarity = document.createElement("Div")
+    choice1Rarity.classList.add("roulette-rarity")
+    choice1Rarity.classList.add("centered")
+    choice1Rarity.textContent = rouletteChoice1.rarity
+    let rarityString = "roulette-rarity-" + rouletteChoice1.rarity
+    choice1Rarity.classList.add(rarityString)
 
-  let choice1Div = document.createElement("Div")
-  choice1Div.classList.add("next-level-option")
-  choice1Div.textContent = rouletteChoice1.name + "-" + rouletteChoice1.text
-  choice1Div.classList.add("next-level-clickable")
-  choice1Div.onclick = function () {
-      rouletteChoice1.rouletteFunc(stateObj, rouletteChoice1.value)
+    choice1Div.append(choice1Title, choice1Text, choice1Rarity)
+
+    choice1Div.classList.add("roulette-clickable")
+    choice1Div.onclick = function () {
+        rouletteChoice1.rouletteFunc(stateObj, rouletteChoice1.value)
+    }
+    storeDiv.append(choice1Div)
   }
-
-  let rouletteNum2 = Math.floor(Math.random() * roulette2Array.length)
-  let rouletteChoice2 = roulette2Array[rouletteNum2]
-  roulette2Array.splice(rouletteNum2, 1)
-
-  let choice2Div = document.createElement("Div")
-  choice2Div.classList.add("next-level-option")
-  choice2Div.textContent = rouletteChoice2.name + "-" + rouletteChoice2.text
-  choice2Div.classList.add("next-level-clickable")
-  choice2Div.onclick = function () {
-      rouletteChoice2.rouletteFunc(stateObj, rouletteChoice2.value)
-  }
-
-  let rouletteNum3 = Math.floor(Math.random() * roulette3Array.length)
-  let rouletteChoice3 = roulette3Array[rouletteNum3]
-  roulette3Array.splice(rouletteNum3, 1)
-
-  let choice3Div = document.createElement("Div")
-  choice3Div.classList.add("next-level-option")
-  choice3Div.textContent = rouletteChoice3.name + "-" + rouletteChoice3.text
-  choice3Div.classList.add("next-level-clickable")
-  choice3Div.onclick = function () {
-      rouletteChoice3.rouletteFunc(stateObj, rouletteChoice3.value)
-  }
-
-  storeDiv.append(choice1Div, choice2Div, choice3Div)
   return storeDiv
 }
   

@@ -2,7 +2,9 @@ let commonRouletteChoices = [
     tankone = {
         name: "Fuel Tank +",
         rarity: "common",
-        text: "Increase Fuel Tank by 5",
+        text:  (stateObj) => {
+            return "Increase Fuel Tank by " + Math.ceil(5*stateObj.overallFuelModifier)
+        },
         value: 5,
         rouletteFunc: async (stateObj, value) => {
             stateObj = immer.produce(stateObj, (newState) => {
@@ -19,7 +21,9 @@ let commonRouletteChoices = [
     hullone = {
         name: "Hull Armor +",
         rarity: "common",
-        text: "Increase Hull Armor by 5",
+        text:  (stateObj) => {
+            return "Increase Hull Armor by " + Math.ceil(5*stateObj.overallHullModifier)
+        },
         value: 5,
         rouletteFunc: async (stateObj, value) => {
             stateObj = immer.produce(stateObj, (newState) => {
@@ -34,9 +38,11 @@ let commonRouletteChoices = [
     },
 
     cargobayzero = {
-        name: "Cargo Bay",
+        name: "Cargo Bay +",
         rarity: "common",
-        text: "Increase Cargo Bay by 1",
+        text:  (stateObj) => {
+            return "Increase Cargo Bay by 1"
+        },
         value: 1,
         rouletteFunc: async (stateObj, value) => {
             stateObj = immer.produce(stateObj, (newState) => {
@@ -52,7 +58,9 @@ let commonRouletteChoices = [
     dirtClod = {
         name: "Concentrated Mud",
         rarity: "common",
-        text: "Fill your dirt reserves",
+        text:  (stateObj) => {
+            return "Fill your dirt reserves"
+        },
         value: 1,
         rouletteFunc: async (stateObj, value) => {
             stateObj = immer.produce(stateObj, (newState) => {
@@ -75,7 +83,9 @@ let uncommonRouletteChoices = [
     weaponFill = {
         name: "Weapon Refill",
         rarity: "uncommon",
-        text: "Randomly refill a bomb or laser",
+        text:  (stateObj) => {
+            return "Randomly refill a bomb or laser"
+        },
         value: 1,
         rouletteFunc: async (stateObj, value) => {
             stateObj = immer.produce(stateObj, (newState) => {
@@ -95,7 +105,9 @@ let uncommonRouletteChoices = [
     tanktwo = {
         name: "Fuel Tank ++",
         rarity: "uncommon",
-        text: "Increase Fuel Tank by 10",
+        text:  (stateObj) => {
+            return "Increase Fuel Tank by " + Math.ceil(10*stateObj.overallFuelModifier)
+        },
         value: 10,
         rouletteFunc: async (stateObj, value) => {
             stateObj = immer.produce(stateObj, (newState) => {
@@ -112,7 +124,9 @@ let uncommonRouletteChoices = [
     hulltwo = {
         name: "Hull Armor ++",
         rarity: "uncommon",
-        text: "Increase Hull Armor by 10",
+        text:  (stateObj) => {
+            return "Increase Hull Armor by " + Math.ceil(10*stateObj.overallHullModifier)
+        },
         value: 10,
         rouletteFunc: async (stateObj, value) => {
             stateObj = immer.produce(stateObj, (newState) => {
@@ -127,9 +141,11 @@ let uncommonRouletteChoices = [
     },
 
     cargobayone = {
-        name: "Cargo Bay +",
+        name: "Cargo Bay ++",
         rarity: "uncommon",
-        text: "Increase Cargo Bay by 2",
+        text:  (stateObj) => {
+            return "Increase Cargo Bay By 2"
+        },
         value: 2,
         rouletteFunc: async (stateObj, value) => {
             stateObj = immer.produce(stateObj, (newState) => {
@@ -143,9 +159,11 @@ let uncommonRouletteChoices = [
     },
 
     dirtefficiencyone = {
-        name: "Dirt Efficiency",
+        name: "Dirt Efficiency +",
         rarity: "common",
-        text: "Decrease dirt threshold by 10%",
+        text:  (stateObj) => {
+            return "Decrease dirt threshold by 10%"
+        },
         value: 1,
         rouletteFunc: async (stateObj, value) => {
             stateObj = immer.produce(stateObj, (newState) => {
@@ -165,9 +183,11 @@ let uncommonRouletteChoices = [
 let rareRouletteChoices = [
 
     gemthree = {
-        name: "Valuable Ore++",
+        name: "Valuable Ore +",
         rarity: "rare",
-        text: "Add $80",
+        text:  (stateObj) => {
+            return "Get $80"
+        },
         value: 80,
         rouletteFunc: async (stateObj, value) => {
             stateObj = immer.produce(stateObj, (newState) => {
@@ -183,7 +203,9 @@ let rareRouletteChoices = [
     tankthree = {
         name: "Fuel Tank +++",
         rarity: "rare",
-        text: "Increase Fuel Tank by 15",
+        text:  (stateObj) => {
+            return "Increase Fuel Tank by " + Math.ceil(15*stateObj.overallFuelModifier)
+        },
         value: 15,
         rouletteFunc: async (stateObj, value) => {
             stateObj = immer.produce(stateObj, (newState) => {
@@ -200,7 +222,9 @@ let rareRouletteChoices = [
     hullthree = {
         name: "Hull Armor +++",
         rarity: "rare",
-        text: "Increase Hull Armor by 15",
+        text:  (stateObj) => {
+            return "Increase Hull Armor by " + Math.ceil(15*stateObj.overallHullModifier)
+        },
         value: 15,
         rouletteFunc: async (stateObj, value) => {
             stateObj = immer.produce(stateObj, (newState) => {
@@ -215,9 +239,11 @@ let rareRouletteChoices = [
     },
 
     cargobaytwo = {
-        name: "Cargo Bay ++",
+        name: "Cargo Bay +++",
         rarity: "rare",
-        text: "Increase Cargo Bay by 3",
+        text:  (stateObj) => {
+            return "Increase Cargo Bay by 3"
+        },
         value: 3,
         rouletteFunc: async (stateObj, value) => {
             stateObj = immer.produce(stateObj, (newState) => {
@@ -230,9 +256,11 @@ let rareRouletteChoices = [
         type: "cargobay"
     },
     dirtefficiencyone = {
-        name: "Dirt Efficiency+",
+        name: "Dirt Efficiency ++",
         rarity: "rare",
-        text: "Decrease dirt threshold by 20%",
+        text:  (stateObj) => {
+            return "Decrease dirt threshold by 20%"
+        },
         value: 1,
         rouletteFunc: async (stateObj, value) => {
             stateObj = immer.produce(stateObj, (newState) => {
@@ -255,7 +283,9 @@ let legendaryRouletteChoices = [
     tankthree = {
         name: "Fuel Tank ++++",
         rarity: "legendary",
-        text: "Increase Fuel Tank by 20",
+        text:  (stateObj) => {
+            return "Increase Fuel Tank by " + Math.ceil(20*stateObj.overallFuelModifier)
+        },
         value: 20,
         rouletteFunc: async (stateObj, value) => {
             stateObj = immer.produce(stateObj, (newState) => {
@@ -270,9 +300,11 @@ let legendaryRouletteChoices = [
     },
 
     hullfour = {
-        name: "Hull Armor +++",
+        name: "Hull Armor ++++",
         rarity: "legendary",
-        text: "Increase Hull Armor by 20",
+        text:  (stateObj) => {
+            return "Increase Hull Armor by " + Math.ceil(20*stateObj.overallHullModifier)
+        },
         value: 20,
         rouletteFunc: async (stateObj, value) => {
             stateObj = immer.produce(stateObj, (newState) => {
@@ -286,9 +318,11 @@ let legendaryRouletteChoices = [
         type: "hull"
     },
     cargobaythree = {
-        name: "Cargo Bay +++",
+        name: "Cargo Bay ++++",
         rarity: "legendary",
-        text: "Increase Cargo Bay by 5",
+        text:  (stateObj) => {
+            return "Increase Cargo Bay by 5"
+        },
         value: 5,
         rouletteFunc: async (stateObj, value) => {
             stateObj = immer.produce(stateObj, (newState) => {
@@ -302,9 +336,11 @@ let legendaryRouletteChoices = [
     },
 
     gemfour = {
-        name: "Valuable Ore++",
+        name: "Valuable Ore ++",
         rarity: "legendary",
-        text: "Add $200",
+        text:  (stateObj) => {
+            return "Get $200"
+        },
         value: 200,
         rouletteFunc: async (stateObj, value) => {
             stateObj = immer.produce(stateObj, (newState) => {
