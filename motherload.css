@@ -901,7 +901,7 @@ body:has(.store-clickable#store-inventory-upgrade-div:hover) #current-inv-bar  {
 
   .store-clickable {
     background-color: rgba(87, 202, 202, 0.995);
-    color: rgba(156, 234, 218, 0.976);
+    /* color: rgba(156, 234, 218, 0.976); */
   }
 
   #store-buy-laser-div, #store-buy-bomb-div, #store-laser-capacity-upgrade-div, #store-bomb-capacity-upgrade-div {
@@ -915,7 +915,6 @@ body:has(.store-clickable#store-inventory-upgrade-div:hover) #current-inv-bar  {
   .store-clickable:hover#store-fuel-div,
   .store-clickable:hover#store-fuel-upgrade-div {
     border: 1vh solid rgb(249, 170, 1);
-    color: rgb(249, 170, 1);
   }
 
   .store-clickable:hover#store-repair-div,
@@ -1064,9 +1063,11 @@ body:has(.store-clickable#store-inventory-upgrade-div:hover) #current-inv-bar  {
   }
 
 
-  .store-clickable:hover {
-    background-color: rgb(2, 196, 196);
-    border: 6px solid rgb(0, 147, 147);
+  .store-clickable.store-option:hover {
+    /* background-color: rgb(0, 95, 95); */
+    background-color: rgb(146, 232, 206);
+    color: rgb(255, 255, 255);
+    border: 2px solid rgb(0, 100, 147);
     cursor: pointer;
   }
 

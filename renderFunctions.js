@@ -161,9 +161,6 @@ function renderTopBarStats(stateObj) {
     if (stateObj.numberLasers > 0) {
         laserString = laserString + " (press L to fire)"
     }
-    if (stateObj.laserPiercing === true) {
-        laserString = laserString + "\u00A0  [Piercing]"
-    }
     currentLasersDiv.textContent = laserString
     if (stateObj.laserCapacity > 1 || stateObj.laserPiercing === true) {
         currentLasersDiv.classList.add("upgraded-stat")

@@ -172,12 +172,12 @@ let gameStartState = {
             bottomRowEnemies: [0, 3, 7, 9],
             relicNumber: 1,
             floorNumber: 1,
-            storeRelicPrice: 6000,
+            storeRelicPrice: 7000,
             rubyRelicPrice: 7,
             amethystRelicPrice: 0,
             hullGoldUpgradePrice: 10,
             rubyHullUpgradePrice: 0,
-            screenwidthBlocks: 25,
+            screenwidthBlocks: 20,
             potentialRelicUpgrades: 1,
         },
         {
@@ -187,34 +187,34 @@ let gameStartState = {
             bottomRowEnemies: [1, 3, 5, 7],
             relicNumber: 1,
             floorNumber: 2,
-            storeRelicPrice: 12000,
+            storeRelicPrice: 15000,
             rubyRelicPrice: 0,
             amethystRelicPrice: 3,
             hullGoldUpgradePrice: 0,
             rubyHullUpgradePrice: 5,
-            screenwidthBlocks: 30,
+            screenwidthBlocks: 25,
             potentialRelicUpgrades: 1,
         },
         {
             barVals: [0.9995, 0.995, 0.98, 0.95, 0.9, 0.8, 0.75],
             enemyValue: 0.935,
             numberRows: 50,
-            screenwidthBlocks: 35,
+            screenwidthBlocks: 30,
             bottomRowEnemies: [1, 2, 4, 5, 7],
             relicNumber: 1,
             floorNumber: 3,
-            storeRelicPrice: 25000,
+            storeRelicPrice: 30000,
             rubyRelicPrice: 0,
             amethystRelicPrice: 7,
             hullGoldUpgradePrice: 0,
             rubyHullUpgradePrice: 10,
-            potentialRelicUpgrades: 2,
+            potentialRelicUpgrades: 1,
         },
         {
             barVals: [0.995, 0.98, 0.95, 0.9, 0.85, 0.77, 0.75],
             enemyValue: 0.91,
             numberRows: 70,
-            screenwidthBlocks: 40,
+            screenwidthBlocks: 35,
             bottomRowEnemies: [1, 2, 4, 5, 7],
             relicNumber: 1,
             floorNumber: 4,
@@ -223,7 +223,7 @@ let gameStartState = {
             amethystRelicPrice: 15,
             hullGoldUpgradePrice: 0,
             rubyHullUpgradePrice: 15,
-            potentialRelicUpgrades: 2,
+            potentialRelicUpgrades: 1,
         },
         
     ],
@@ -420,7 +420,8 @@ async function fillMapWithArray(stateObj) {
                 }
                 relicArray = relicArray.filter(obj => obj.shopRelic)
                 relicStoreNum = Math.floor(Math.random() * relicArray.length)
-                newState.storeRelic1 = relicArray[relicStoreNum]
+                // newState.storeRelic1 = relicArray[relicStoreNum]
+                newState.storeRelic1 = false
                 //newState.storeRelic1 = potentialRelics[19]
                 relicArray.splice(relicStoreNum, 1)
                 relicStoreNum2 = Math.floor(Math.random() * relicArray.length)

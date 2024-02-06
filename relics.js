@@ -219,10 +219,10 @@ let potentialRelics = [
         name: "Remote Detonator",
         varName: "remoteBombsRelic",
         text: (stateObj) => {
-            return "Trigger bombs remotely instead of on impact (by pressing 'B' again)"
+            return "Trigger bombs remotely, not on impact  (press 'B' again)"
         },
         storeText: (stateObj) => {
-            return "Trigger bombs remotely instead of on impact (by pressing 'B' again)"
+            return "Trigger bombs remotely, not on impact (press 'B' again)"
         },
         relicFunc: async (stateObj) => {
             stateObj = immer.produce(stateObj, (newState) => {
