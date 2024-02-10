@@ -81,6 +81,20 @@ html, body {
     /* border: 0.5px solid rgba(97, 48, 0, 0.756); */
   }
 
+  .map-square-fish {
+    /* width: 13.5vw;
+    height: 12vh; */
+    width:  7.5vw;
+    height: 6.5vh;
+    color: mediumspringgreen;
+    transition: background-color 1500ms ease-out;
+    /* display: flex;
+    justify-content: center;
+    align-items: center; */
+    object-fit: cover;
+    /* border: 0.5px solid rgba(97, 48, 0, 0.756); */
+  }
+
   #fuel-div, #hull-div, .inventory {
     display: flex;
     flex-direction: row;
@@ -271,8 +285,8 @@ html, body {
 
 .player-here {
   position: relative;
-  width:  10.5vw;
-  height: 10vh;
+  /* width:  10.5vw;
+  height: 10vh; */
 
 }
   .player-img {
@@ -350,9 +364,9 @@ html, body {
 
   .bronze-img, .enemy-img, .dirt-img, .stone-img,  .silver-img, .gold-img, .ruby-img, .amethyst-img, .diamond-img, .blkdiamond-img,
   .stone-amethyst-img, .stone-diamond-img, .stone-blkdiamond-img, .crate-img {
-    width:  10.5vw;
-    height: 10vh;
     object-fit: cover;
+    height: 100%;
+    width: 100%;
   }
 
   .relic-div, .relics-div {
@@ -411,9 +425,15 @@ html, body {
 }
 
 .store-img, .exit-img {
-  height: 9vw;
-  height: 9vh;
-  object-fit: contain;
+  object-fit: cover;
+  height: 10vh;
+  width: auto;
+}
+
+.store-img-fish, .exit-img-fish {
+  object-fit: cover;
+  height: 8vh;
+  width: auto;
 }
 
 .store-sub-img {

@@ -918,45 +918,47 @@ function renderMap(stateObj) {
   let screenwidthBlocks = stateObj.floorValues[stateObj.currentLevel].screenwidthBlocks
   let currentFloor = Math.floor(stateObj.currentPosition / screenwidthBlocks)
   //starting floor position is 0 if you're not at least 4 floors deep
+  let mapSizeVal = (stateObj.fishEyeLens) ? 6 : 4;
+
   let startingFloor = false;
-  if (currentFloor < 4) {
+  if (currentFloor < mapSizeVal) {
     startingFloor = 0
   } else {
-    if (currentFloor > (stateObj.floorValues[stateObj.currentLevel].numberRows - 4)) {
-      startingFloor = stateObj.floorValues[stateObj.currentLevel].numberRows - 5
+    if (currentFloor > (stateObj.floorValues[stateObj.currentLevel].numberRows - mapSizeVal)) {
+      startingFloor = stateObj.floorValues[stateObj.currentLevel].numberRows - mapSizeVal - 1
     } else {
-      startingFloor = currentFloor - 4
+      startingFloor = currentFloor - mapSizeVal
     }
   }
   let endingFloor = false
   if (startingFloor === 0) {
     //only show 8 floors at once
-    endingFloor = 9
+    endingFloor = (mapSizeVal*2) + 1
   } else {
     //if you're near the end of the level, the ending floor range is the end of the level
-    if (currentFloor > (stateObj.floorValues[stateObj.currentLevel].numberRows-4)) {
-      endingFloor = stateObj.floorValues[stateObj.currentLevel].numberRows+6
+    if (currentFloor > (stateObj.floorValues[stateObj.currentLevel].numberRows-mapSizeVal)) {
+      endingFloor = stateObj.floorValues[stateObj.currentLevel].numberRows + mapSizeVal + 2
     } else {
-      endingFloor = currentFloor+4
+      endingFloor = currentFloor + mapSizeVal
     }
   }
   let currentPosition = stateObj.currentPosition - (currentFloor*(screenwidthBlocks))
   let startingPosition = false
-  if (currentPosition < 4) {
+  if (currentPosition < mapSizeVal) {
     startingPosition = 0
   } else {
-    if (currentPosition > (screenwidthBlocks-5)) {
-      startingPosition = screenwidthBlocks - 9
+    if (currentPosition > (screenwidthBlocks-mapSizeVal-1)) {
+      startingPosition = screenwidthBlocks - ((mapSizeVal*2) + 1)
     } else {
-      startingPosition = currentPosition - 4
+      startingPosition = currentPosition - mapSizeVal
     }
   }
   let endingPosition = false
   if (startingPosition === 0) {
-    endingPosition = 9
+    endingPosition = ((mapSizeVal*2) + 1)
   } else {
-    endingPosition = (currentPosition > (screenwidthBlocks-5))
-    ? screenwidthBlocks : currentPosition + 5
+    endingPosition = (currentPosition > (screenwidthBlocks- mapSizeVal - 1))
+    ? screenwidthBlocks : currentPosition + mapSizeVal + 1
   }
   // console.log("current floor is " + currentFloor)
   // console.log("starting floor is " + startingFloor)
@@ -974,7 +976,12 @@ function renderMap(stateObj) {
 
     if (inFloorRange && inPositionRange) {
       let mapSquareDiv = document.createElement("Div");
-      mapSquareDiv.classList.add("map-square");
+      if (stateObj.fishEyeLens) {
+        mapSquareDiv.classList.add("map-square-fish");
+      } else {
+        mapSquareDiv.classList.add("map-square");
+      }
+      
 
       if (stateObj.currentPosition === squareIndex) {
           mapSquareDiv.classList.add("player-here")
@@ -1082,13 +1089,21 @@ function renderMap(stateObj) {
       }  else if (mapSquare === "STORE") {
           mapSquareDiv.classList.add("store")
           let mapSquareImg = document.createElement("Img");
-          mapSquareImg.classList.add("store-img")
+          if (stateObj.fishEyeLens) {
+            mapSquareImg.classList.add("store-img-fish")
+          } else {
+            mapSquareImg.classList.add("store-img")
+          }
           mapSquareImg.src = "img/map/store.png"
           mapSquareDiv.append(mapSquareImg)
       } else if (mapSquare === "EXIT") {
           mapSquareDiv.classList.add("exit")
           let mapSquareImg = document.createElement("Img");
-          mapSquareImg.classList.add("exit-img")
+          if (stateObj.fishEyeLens) {
+            mapSquareImg.classList.add("exit-img-fish")
+          } else {
+            mapSquareImg.classList.add("exit-img")
+          }
           mapSquareImg.src = "img/map/exit.jpg"
           mapSquareDiv.append(mapSquareImg)
       } else if (mapSquare === "BOMB") {

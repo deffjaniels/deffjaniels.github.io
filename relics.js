@@ -830,6 +830,29 @@ let potentialRelics = [
         shopRelic: true,
         multiplePossible: true,
     },
+
+    fishEyeRelic = {
+        name: "Fish Eye Lens",
+        varName: "fisheyerelic",
+        text: (stateObj) => {
+            return "Wider view (can see more blocks onscreen at once)"
+        },
+        storeText: (stateObj) => {
+            return "Wider view (can see more blocks onscreen at once)"
+        },
+        relicFunc: async (stateObj) => {
+            stateObj = immer.produce(stateObj, (newState) => {
+                newState.fishEyeLens = true;
+                newState.playerRelicArray.push(fishEyeRelic)
+            })
+            await changeState(stateObj);
+            return stateObj
+        },
+        imgPath: "img/relics/fisheye.png",
+        levelRelic: true,
+        shopRelic: true,
+        multiplePossible: false,
+    },
 ]
 
 
@@ -864,6 +887,10 @@ function buildRelicArray(stateObj) {
     if (stateObj.efficientGoldConverter === false) {
         tempArray.push(potentialRelics[28])
     }
-    //tempArray = [ fuelToBlocksRelic, fuelToBlocksRelic, fuelToBlocksRelic, fuelToBlocksRelic]
+
+    if (stateObj.fishEyeLens === false) {
+        tempArray.push(potentialRelics[32])
+    }
+    //tempArray = [ fishEyeRelic, fishEyeRelic, fishEyeRelic, fishEyeRelic]
     return tempArray
 }
