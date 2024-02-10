@@ -84,7 +84,7 @@ html, body {
   .map-square-fish {
     /* width: 13.5vw;
     height: 12vh; */
-    width:  7.5vw;
+    width:  7.1vw;
     height: 6.5vh;
     color: mediumspringgreen;
     transition: background-color 1500ms ease-out;
