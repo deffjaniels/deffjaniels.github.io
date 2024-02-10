@@ -94,7 +94,7 @@ let gameStartState = {
     overallFuelModifier: 1,
     playerRelicArray: [],
     storeUpgradeArray: [],
-    fishEyeLens: true,
+    fishEyeLens: false,
 
     storeRelics: [],
     mapRelic1: false,
