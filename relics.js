@@ -8,6 +8,7 @@ let potentialRelics = [
         text: (stateObj) => {
             let val = stateObj.spareFuelTank
             let tradeString = "If you run out of fuel, fully refill your fuel " + val + " time"
+            if (val > 1) { tradeString += "s"}
             return tradeString
         },
         storeText: (stateObj) => {
@@ -17,9 +18,14 @@ let potentialRelics = [
             return tradeString
         },
         relicFunc: async (stateObj, add=true) => {
-            stateObj = immer.produce(stateObj, (newState) => {
+            stateObj = await immer.produce(stateObj, (newState) => {
                 newState.spareFuelTank += 1;
-                if(add) {newState.playerRelicArray.push(spareTank)}
+                let index = newState.playerRelicArray.map(function(e) { return e.name; }).indexOf('Spare Fuel Tank');
+                if (index === -1) {
+                    newState.playerRelicArray.push(spareTank)
+                } else {
+                    newState.playerRelicArray[index].upgrades +=1
+                }
             })
             await changeState(stateObj);
             return stateObj
@@ -27,7 +33,7 @@ let potentialRelics = [
         imgPath: "img/fueltank.png",
         levelRelic: true,
         shopRelic: true,
-        multiplePossible: true,
+        upgrades: 1,
 
     },
 
@@ -47,7 +53,12 @@ let potentialRelics = [
         relicFunc: async (stateObj, add=true) => {
             stateObj = immer.produce(stateObj, (newState) => {
                 newState.goldMaxInventory += 1;
-                if (add){newState.playerRelicArray.push(goldMaxInventory)}
+                let index = newState.playerRelicArray.map(function(e) { return e.name; }).indexOf('Augmented Cargo Bay');
+                if (index === -1) {
+                    newState.playerRelicArray.push(goldMaxInventory)
+                } else {
+                    newState.playerRelicArray[index].upgrades +=1
+                }
             })
             await changeState(stateObj);
             return stateObj
@@ -56,7 +67,7 @@ let potentialRelics = [
         imgPath: "img/relics/goldmaxinventory.png",
         levelRelic: true,
         shopRelic: true,
-        multiplePossible: true,
+        upgrades: 1,
     },
 
     pauseEnemies = {
@@ -78,7 +89,7 @@ let potentialRelics = [
         imgPath: "img/relics/stoprelic.png",
         levelRelic: true,
         shopRelic: false,
-        multiplePossible: false,
+        upgrades: false,
     },
 
     dirtMaxFuel = {
@@ -106,7 +117,7 @@ let potentialRelics = [
         imgPath: "img/relics/dirtmaxfuel.png",
         levelRelic: true,
         shopRelic: false,
-        multiplePossible: true,
+        upgrades: 1,
     },
 
     enemiesDealLess = {
@@ -133,7 +144,7 @@ let potentialRelics = [
         imgPath: "img/relics/shield2.png",
         levelRelic: true,
         shopRelic: true,
-        multiplePossible: true,
+        upgrades: 1,
     },
 
     //5
@@ -161,7 +172,7 @@ let potentialRelics = [
         imgPath: "img/relics/gasshield.png",
         levelRelic: true,
         shopRelic: true,
-        multiplePossible: true,
+        upgrades: 1,
     },
 
     thornsRelic = {
@@ -184,7 +195,7 @@ let potentialRelics = [
         imgPath: "img/relics/thorns.png",
         levelRelic: true,
         shopRelic: true,
-        multiplePossible: false,
+        upgrades: false,
         
     },
 
@@ -212,7 +223,7 @@ let potentialRelics = [
         imgPath: "img/relics/bronzesilverbonus.png",
         levelRelic: true,
         shopRelic: true,
-        multiplePossible: true,
+        upgrades: 1,
     },
 
     remoteBombsRelic = {
@@ -235,7 +246,7 @@ let potentialRelics = [
         imgPath: "img/relics/remotebomb.png",
         levelRelic: true,
         shopRelic: true,
-        multiplePossible: false,
+        upgrades: false,
     },
 
     weaponsPriceRelic = {
@@ -261,7 +272,7 @@ let potentialRelics = [
         },
         levelRelic: true,
         shopRelic: false,
-        multiplePossible: true,
+        upgrades: 1,
         imgPath: "img/relics/gun1.png",
     },
 
@@ -290,7 +301,7 @@ let potentialRelics = [
         imgPath: "img/relics/killhull.png",
         levelRelic: true,
         shopRelic: true,
-        multiplePossible: true,
+        upgrades: 1,
         
     },
 
@@ -318,7 +329,7 @@ let potentialRelics = [
         imgPath: "img/relics/repairkill.png",
         levelRelic: true,
         shopRelic: true,
-        multiplePossible: true,
+        upgrades: 1,
     },
 
     silverHealingRelic = {
@@ -345,7 +356,7 @@ let potentialRelics = [
         imgPath: "img/relics/silverhealing.png",
         levelRelic: true,
         shopRelic: true,
-        multiplePossible: true,
+        upgrades: 1,
     },
 
     bronzeMaxHullRelic = {
@@ -372,7 +383,7 @@ let potentialRelics = [
         imgPath: "img/relics/bronzemaxhull.png",
         levelRelic: true,
         shopRelic: true,
-        multiplePossible: true,
+        upgrades: 1,
     },
 
     dirtRubyRelic = {
@@ -392,7 +403,7 @@ let potentialRelics = [
         imgPath: "img/relics/dirtruby.png",
         levelRelic: true,
         shopRelic: false,
-        multiplePossible: false,
+        upgrades: false,
     },
 
     //15
@@ -420,7 +431,7 @@ let potentialRelics = [
         imgPath: "img/relics/bombupgrader.png",
         levelRelic: true,
         shopRelic: true,
-        multiplePossible: true,
+        upgrades: 1,
     },
 
     laserPiercingRelic = {
@@ -443,7 +454,7 @@ let potentialRelics = [
         imgPath: "img/relics/laserpiercing.png",
         levelRelic: true,
         shopRelic: true,
-        multiplePossible: false,
+        upgrades: false,
     },
 
     bombRefillRelic = {
@@ -472,7 +483,7 @@ let potentialRelics = [
         imgPath: "img/relics/bombrefill.png",
         levelRelic: true,
         shopRelic: true,
-        multiplePossible: true,
+        upgrades: 1,
     },
 
     fuelToBlocksRelic = {
@@ -499,7 +510,7 @@ let potentialRelics = [
         imgPath: "img/relics/fueltoblocks.png",
         levelRelic: true,
         shopRelic: true,
-        multiplePossible: true,
+        upgrades: 1,
     },
 
     upgradeDirtBlockRelic = {
@@ -526,7 +537,7 @@ let potentialRelics = [
         imgPath: "img/relics/drillupgrade.png",
         levelRelic: true,
         shopRelic: true,
-        multiplePossible: true,
+        upgrades: 1,
     },
 
     //20
@@ -565,7 +576,7 @@ let potentialRelics = [
         imgPath: "img/relics/teleporter.png",
         levelRelic: true,
         shopRelic: true,
-        multiplePossible: true,
+        upgrades: 1,
     },
 
     dirtCompactor = {
@@ -588,7 +599,7 @@ let potentialRelics = [
         imgPath: "img/relics/infinitedirt.png",
         levelRelic: true,
         shopRelic: true,
-        multiplePossible: false,
+        upgrades: false,
     },
 
     magneticBlocks = {
@@ -608,7 +619,7 @@ let potentialRelics = [
         imgPath: "img/relics/magnetblocks.png",
         levelRelic: true,
         shopRelic: false,
-        multiplePossible: false,
+        upgrades: false,
     },
 
 
@@ -636,7 +647,7 @@ let potentialRelics = [
         imgPath: "img/relics/silvermaxfuel.png",
         levelRelic: true,
         shopRelic: true,
-        multiplePossible: true,
+        upgrades: 1,
     },
 
     bronzeSilverConverter = {
@@ -659,7 +670,7 @@ let potentialRelics = [
         imgPath: "img/relics/bronzesilverconverter.png",
         levelRelic: true,
         shopRelic: true,
-        multiplePossible: false,
+        upgrades: false,
     },
 
     //25
@@ -681,7 +692,7 @@ let potentialRelics = [
         imgPath: "img/relics/dirtrefillsweapons.png",
         levelRelic: true,
         shopRelic: false,
-        multiplePossible: false,
+        upgrades: false,
     },
 
     laserCapacityRelic = {
@@ -701,7 +712,7 @@ let potentialRelics = [
         imgPath: "img/relics/lasercapacity.png",
         levelRelic: true,
         shopRelic: false,
-        multiplePossible: false,
+        upgrades: false,
     },
 
     laserRecaptureRelic = {
@@ -722,7 +733,10 @@ let potentialRelics = [
         relicFunc: async (stateObj, add=true) => {
             stateObj = immer.produce(stateObj, (newState) => {
                 newState.laserGemRefill += 1;
-                if(add){newState.playerRelicArray.push(laserRecaptureRelic)}
+                if(add){
+                    newState.playerRelicArray.push(laserRecaptureRelic)
+                    newState.playerRelicArray[newState.playerRelicArray.length-1].upgrades += 1
+                }
             })
             await changeState(stateObj);
             return stateObj
@@ -730,7 +744,7 @@ let potentialRelics = [
         imgPath: "img/relics/laserrecapture.png",
         levelRelic: true,
         shopRelic: true,
-        multiplePossible: true,
+        upgrades: 1,
     },
 
     efficientConverter = {
@@ -753,7 +767,7 @@ let potentialRelics = [
         imgPath: "img/relics/efficientgold.png",
         levelRelic: true,
         shopRelic: true,
-        multiplePossible: false,
+        upgrades: false,
     },
 
     rubyLocator = {
@@ -773,7 +787,7 @@ let potentialRelics = [
         imgPath: "img/relics/rubyincrease.png",
         levelRelic: true,
         shopRelic: false,
-        multiplePossible: false,
+        upgrades: false,
     },
 
     //30
@@ -801,7 +815,7 @@ let potentialRelics = [
         imgPath: "img/relics/overallfuelmod.png",
         levelRelic: true,
         shopRelic: true,
-        multiplePossible: true,
+        upgrades: 1,
     },
 
     hulllMult = {
@@ -828,7 +842,7 @@ let potentialRelics = [
         imgPath: "img/relics/overallhullmod.png",
         levelRelic: true,
         shopRelic: true,
-        multiplePossible: true,
+        upgrades: 1,
     },
 
     fishEyeRelic = {
@@ -851,7 +865,7 @@ let potentialRelics = [
         imgPath: "img/relics/fisheye.png",
         levelRelic: true,
         shopRelic: true,
-        multiplePossible: false,
+        upgrades: false,
     },
 ]
 
@@ -891,6 +905,6 @@ function buildRelicArray(stateObj) {
     if (stateObj.fishEyeLens === false) {
         tempArray.push(potentialRelics[32])
     }
-    //tempArray = [ fishEyeRelic, fishEyeRelic, fishEyeRelic, fishEyeRelic]
+    tempArray = [ spareTank, spareTank, spareTank, goldMaxInventory, goldMaxInventory, goldMaxInventory, goldMaxInventory]
     return tempArray
 }

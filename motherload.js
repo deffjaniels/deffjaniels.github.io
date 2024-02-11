@@ -52,7 +52,8 @@ let gameStartState = {
     blackDiamondInventory: 0,
     
 
-    bankedCash: 100,
+    bankedCash: 10000,
+    ammo: 2,
     
     numberLasers: 1,
     laserCapacity: 2,
@@ -163,7 +164,7 @@ let gameStartState = {
             amethystRelicPrice: 0,
             hullGoldUpgradePrice: 5,
             rubyHullUpgradePrice: 0,
-            screenwidthBlocks: 15,
+            screenwidthBlocks: 12,
             potentialRelicUpgrades: 0,
         },
         {
@@ -178,7 +179,7 @@ let gameStartState = {
             amethystRelicPrice: 0,
             hullGoldUpgradePrice: 10,
             rubyHullUpgradePrice: 0,
-            screenwidthBlocks: 17,
+            screenwidthBlocks: 14,
             potentialRelicUpgrades: 1,
         },
         {
@@ -193,14 +194,14 @@ let gameStartState = {
             amethystRelicPrice: 2,
             hullGoldUpgradePrice: 0,
             rubyHullUpgradePrice: 5,
-            screenwidthBlocks: 20,
+            screenwidthBlocks: 16,
             potentialRelicUpgrades: 1,
         },
         {
             barVals: [0.9995, 0.995, 0.98, 0.95, 0.9, 0.8, 0.75],
             enemyValue: 0.935,
             numberRows: 50,
-            screenwidthBlocks: 22,
+            screenwidthBlocks: 18,
             bottomRowEnemies: [1, 2, 4, 5, 7],
             relicNumber: 1,
             floorNumber: 3,
@@ -215,7 +216,7 @@ let gameStartState = {
             barVals: [0.995, 0.98, 0.95, 0.9, 0.85, 0.77, 0.75],
             enemyValue: 0.91,
             numberRows: 70,
-            screenwidthBlocks: 25,
+            screenwidthBlocks: 20,
             bottomRowEnemies: [1, 2, 4, 5, 7],
             relicNumber: 1,
             floorNumber: 4,
@@ -415,9 +416,7 @@ async function fillMapWithArray(stateObj) {
                         newState.mapRelic2 = relicArray[relicNum]
                         newState.gameMap[relicSquareArray[i]] = "relic2"
                     }
-                    if (!relicArray[relicNum].multiplePossible) {
-                        relicArray.splice(relicNum, 1)
-                    }
+                    relicArray.splice(relicNum, 1)
                 }
                 relicArray = relicArray.filter(obj => obj.shopRelic)
                 relicStoreNum = Math.floor(Math.random() * relicArray.length)
@@ -453,14 +452,11 @@ async function fillMapWithArray(stateObj) {
         }
     }
     let upgradeNum = stateObj.floorValues[stateObj.currentLevel].potentialRelicUpgrades
-    let relics = stateObj.playerRelicArray.filter(obj => obj.multiplePossible)
-    console.log("upgrade num is " + upgradeNum)
-    console.log("relics length is " + relics.length)
+    let relics = stateObj.playerRelicArray.filter(obj => obj.upgrades)
     for (let i = 0; i < upgradeNum; i++) {
         let relic = Math.floor(Math.random() * relics.length)
         stateObj = await immer.produce(stateObj, (newState) => {
             newState.storeUpgradeArray.push(relics[relic])
-            console.log("newstate array is " + newState.storeUpgradeArray.length)
         })
         relics.splice(relic, 1)
     }
@@ -1270,6 +1266,22 @@ async function buyLaser(stateObj) {
     await changeState(stateObj);
 }
 
+async function craftAmmo(stateObj) {
+    console.log("firing craftAmmo")
+    if (stateObj.silverInventory > 0) {
+        stateObj = immer.produce(stateObj, (newState) => {
+            newState.ammo += 1;
+            newState.silverInventory -= 1
+            newState.currentInventory -= 1
+        })
+        document.querySelector(".craft-button-row").classList.add("store-clicked")
+        await pause(300)
+        document.querySelector(".ammo-text-div").classList.add("emphasis")
+        await pause(300)
+        await changeState(stateObj);
+    }
+}
+
 async function buyBomb(stateObj, purchaseCost) {
     stateObj = immer.produce(stateObj, (newState) => {
         newState.bombCurrentTotal += 1;
@@ -1334,7 +1346,7 @@ document.addEventListener('keydown', async function(event) {
         }  else if (event.key === "h") {
             stateObj = await viewHelpScreen(stateObj)
             await changeState(stateObj)
-        } 
+        }
     }
   });
 
@@ -1829,12 +1841,14 @@ async function loseTheGame(textString) {
 }
 
 async function fireLaser(stateObj, detonatePosition) {
-    stateObj = await immer.produce(stateObj, (newState) => {
-        newState.firingLaserLeft = detonatePosition;
-        newState.firingLaserRight = detonatePosition;
-        newState.numberLasers -= 1;
-    })
-    return stateObj
+    if (stateObj.ammo > 0) {
+        stateObj = await immer.produce(stateObj, (newState) => {
+            newState.firingLaserLeft = detonatePosition;
+            newState.firingLaserRight = detonatePosition;
+            newState.ammo -= 1;
+        })
+        return stateObj
+    }
 }
 
 async function detonateBomb(stateObj, detonatePosition) {
@@ -2043,9 +2057,9 @@ async function dropBlock(stateObj) {
 async function dropBomb(stateObj) {
     if (stateObj.gameMap[stateObj.currentPosition + stateObj.floorValues[stateObj.currentLevel].screenwidthBlocks] === "empty" && stateObj.bombLocation === false) {
         stateObj = await immer.produce(stateObj, (newState) => {
-            if (newState.bombCurrentTotal > 0) {
+            if (newState.ammo > 0) {
                 newState.gameMap[stateObj.currentPosition+stateObj.floorValues[stateObj.currentLevel].screenwidthBlocks] = "BOMB";
-                newState.bombCurrentTotal -= 1;
+                newState.ammo -= 1;
                 newState.bombLocation = stateObj.currentPosition+stateObj.floorValues[stateObj.currentLevel].screenwidthBlocks
                 newState.bombTimer = newState.bombTimerMax;
             }

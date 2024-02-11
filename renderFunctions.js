@@ -152,42 +152,15 @@ function renderTopBarStats(stateObj) {
     cashDiv.classList.add("centered")
     cashDiv.textContent = "$" + stateObj.bankedCash;
 
-    let lasersDiv = document.createElement("Div")
-    lasersDiv.classList.add("weapons-div")
-    let currentLasersDiv = document.createElement("Div")
-    currentLasersDiv.setAttribute("id", "current-lasers-text");
-    laserString = "Lasers"
-    laserString = laserString + ": " + stateObj.numberLasers + "/" + stateObj.laserCapacity
-    if (stateObj.numberLasers > 0) {
-        laserString = laserString + " (press L to fire)"
-    }
-    currentLasersDiv.textContent = laserString
-    if (stateObj.laserCapacity > 1 || stateObj.laserPiercing === true) {
-        currentLasersDiv.classList.add("upgraded-stat")
-    }
-    
+    let ammoDiv = document.createElement("Div")
+    ammoDiv.classList.add("all-weapons-div")
 
-    lasersDiv.append(currentLasersDiv)
+    ammoTextDiv = document.createElement("Div")
+    ammoTextDiv.classList.add("ammo-text-div")
+    ammoString = "Ammo: " + stateObj.ammo
+    ammoTextDiv.textContent = ammoString
 
-    let bombDiv = document.createElement("Div")
-    bombDiv.classList.add("weapons-div")
-    let currentBombsDiv = document.createElement("Div")
-    currentBombsDiv.setAttribute("id", "current-bombs-text");
-    bombString = "Bombs: " + stateObj.bombCurrentTotal + "/" + stateObj.bombCapacity
-    if (stateObj.bombCurrentTotal > 0) {
-        bombString = bombString + " (press B to drop)"
-    }
-    currentBombsDiv.textContent = bombString
-    if (stateObj.bombCapacity > 1) {
-        bombDiv.classList.add("upgraded-stat")
-    }
-
-    bombDiv.append(currentBombsDiv)
-
-    let weaponsDiv = document.createElement("Div")
-    weaponsDiv.classList.add("all-weapons-div")
-    weaponsDiv.classList.add("top-vertical-div")
-    weaponsDiv.append(bombDiv, lasersDiv)
+    ammoDiv.append(ammoTextDiv);
 
 
     let dirtDiv = document.createElement("Div")
@@ -203,35 +176,49 @@ function renderTopBarStats(stateObj) {
     }
     dirtDiv.textContent = dirtString
 
-    topBarDiv.append(scoreLevelDiv, cashDiv, barsDiv, weaponsDiv,dirtDiv)
+    topBarDiv.append(scoreLevelDiv, cashDiv, barsDiv, ammoDiv, dirtDiv)
 
-    for (let i=0; i < stateObj.playerRelicArray.length; i++) {
-      let relic = stateObj.playerRelicArray[i];
-      let weaponPriceRelicDiv = document.createElement("Div")
-        weaponPriceRelicDiv.classList.add("relic-div")
+    
+    for (let i=0; i < 5; i++) {
+      let topBarRelicDiv = document.createElement("Div")
+      topBarRelicDiv.classList.add("bar-relic-div")
+
+      
+      let relic = (stateObj.playerRelicArray[i]) ? stateObj.playerRelicArray[i] : false; 
+      if (relic) {
         let weaponImg = document.createElement("Img");
         weaponImg.classList.add("relic-img")
         weaponImg.src = relic.imgPath
-        weaponPriceRelicDiv.append(weaponImg)
+        topBarRelicDiv.append(weaponImg)
         let idString = "relic-popup-" +i
 
-        weaponPriceRelicDiv.addEventListener('mouseenter', function() {
+        topBarRelicDiv.addEventListener('mouseenter', function() {
           const statusText = document.getElementById(idString);
           statusText.style.display = 'block'
         });
         
-        weaponPriceRelicDiv.addEventListener('mouseleave', function() {
+        topBarRelicDiv.addEventListener('mouseleave', function() {
           const statusText = document.getElementById(idString);
           statusText.style.display = 'none'
         });
-  
+
         let relicTextDiv = document.createElement("Div");
         relicTextDiv.setAttribute("id", idString)
         relicTextDiv.classList.add("none-display")
-        relicTextDiv.textContent = relic.text(stateObj)
-        weaponPriceRelicDiv.appendChild(relicTextDiv);
+        let textString = relic.text(stateObj)
+        relicTextDiv.textContent = textString
 
-        topBarDiv.append(weaponPriceRelicDiv)
+        let relicDivUpgradeString =  "bar-relic-upgrades-" + stateObj.playerRelicArray[i].upgrades
+        topBarRelicDiv.classList.add(relicDivUpgradeString)
+        topBarRelicDiv.appendChild(relicTextDiv);
+      } else {
+      }
+
+      topBarDiv.append(topBarRelicDiv)
+  
+
+      
+
     }
 
     return topBarDiv
@@ -773,6 +760,9 @@ function renderInventory(stateObj) {
   sellDiv.classList.add("viewing-inv-div")
   sellDiv.classList.add("column")
 
+  let allInventoryDiv = document.createElement("Div")
+  allInventoryDiv.classList.add("all-inventory-div")
+
   let sellInventoryDiv = document.createElement("Div")
   sellInventoryDiv.classList.add("selling-div")
   sellInventoryDiv.classList.add("column")
@@ -810,6 +800,14 @@ function renderInventory(stateObj) {
       }
     }
     inventoryDiv.textContent = textString
+
+    let craftAmmoButton = document.createElement("Div")
+    craftAmmoButton.classList.add("craft-button-row")
+    craftAmmoButton.textContent = "Craft Ammo"
+    craftAmmoButton.onclick = async function () {
+      await craftAmmo(stateObj)
+    }
+    inventoryDiv.append(craftAmmoButton)
     sellInventoryDiv.append(inventoryDiv)
 }
 
@@ -895,6 +893,8 @@ if (stateObj.blackDiamondInventory > 0) {
   inventoryDiv.textContent = textString
   sellInventoryDiv.append(inventoryDiv)
 }
+
+
 
   let buyNothingDiv = document.createElement("Div")
   buyNothingDiv.setAttribute("id", "sell-return-map-div")
