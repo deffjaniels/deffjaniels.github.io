@@ -1326,7 +1326,7 @@ document.addEventListener('keydown', async function(event) {
             await changeState(stateObj)
             await checkForDeath(stateObj)
           } else if (event.key === "l") {
-              if (stateObj.numberLasers > 0) {
+              if (stateObj.ammo > 0) {
                   stateObj = await fireLaser(stateObj, stateObj.currentPosition)
                   await changeState(stateObj)
               }
