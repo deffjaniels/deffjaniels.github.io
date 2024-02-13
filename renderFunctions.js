@@ -453,48 +453,46 @@ function renderSellingItems(stateObj) {
   tradeRelicsDiv.classList.add("trade-relics-div")
   tradeRelicsDiv.append(oreRelicDiv, killEnemiesDiv)
 
-  let storeArr = stateObj.storeUpgradeArray
-  for (let i=0; i < storeArr.length; i++) {
-    let upgradeDiv = document.createElement("Div")
+  
+  let upgradeableRelics = stateObj.playerRelicArray.filter(obj => obj.upgrades)
+  let upgradeDiv = document.createElement("Div")
+  if (upgradeableRelics.length > 0) {
     upgradeDiv.classList.add("ruby-relic-div")
     upgradeDiv.classList.add("trade-relic-option")
     upgradeDiv.classList.add("column")
+  
+      let upgradeTitle = document.createElement("Div")
+      upgradeTitle.classList.add("centered")
+      upgradeTitle.textContent = "UPGRADE RELICS"
+  
+      let costDiv = document.createElement("Div")
+      costDiv.classList.add("centered")
+  
+      let costString = "Costs "
+      if (rubyPrice > 0) {
+        costString += rubyPrice + " rubies"
+        if (stateObj.rubyInventory >= rubyPrice) {
+          upgradeDiv.classList.add("ruby-relic-hover")
+          upgradeDiv.onclick = async function () {
+            await viewUpgradeRelic(stateObj)
+          }
+        }
 
-    let upgradeTitle = document.createElement("Div")
-    upgradeTitle.classList.add("centered")
-    upgradeTitle.textContent = "UPGRADE: " + storeArr[i].storeText(stateObj)
-
-    let upgradeImg = document.createElement("Img")
-    upgradeImg.classList.add("store-relic-img")
-    upgradeImg.src = storeArr[i].imgPath
-
-    let costDiv = document.createElement("Div")
-    costDiv.classList.add("centered")
-
-    let costString = "Costs "
-    if (rubyPrice > 0) {
-      costString += rubyPrice + " rubies"
-      if (stateObj.rubyInventory >= rubyPrice) {
-        upgradeDiv.classList.add("ruby-relic-hover")
-      }
-      upgradeDiv.onclick = async function () {
-        await upgradeStoreRelic(stateObj, i, rubyPrice, false)
-      }
-    } else if (amethystPrice > 0) {
-      costString += amethystPrice + " amethysts"
-      if (stateObj.amethystInventory >= amethystPrice) {
-        upgradeDiv.classList.add("diamond-relic-hover")
-        upgradeDiv.onclick = async function () {
-          await upgradeStoreRelic(stateObj, i, false, amethystPrice)
+      } else if (amethystPrice > 0) {
+        costString += amethystPrice + " amethysts"
+        if (stateObj.amethystInventory >= amethystPrice) {
+          upgradeDiv.classList.add("diamond-relic-hover")
+          upgradeDiv.onclick = async function () {
+            await viewUpgradeRelic(stateObj)
+          }
         }
       }
-    }
-
+  
     costDiv.textContent = costString
-    upgradeDiv.append(upgradeTitle, upgradeImg, costString)
-    tradeRelicsDiv.append(upgradeDiv)
+    upgradeDiv.append(upgradeTitle, costDiv)
   }
 
+  tradeRelicsDiv.append(upgradeDiv)
   tradeOreDiv.append(tradeTitle, tradeRelicsDiv)
 
   sellDiv.append(sellOreDiv, tradeOreDiv, redButtonDiv)
@@ -535,7 +533,6 @@ function lostTheGame() {
 }
 
 function wonTheGame() {
-  console.log('triggering won the game')
   let storeDiv = document.createElement("Div")
   storeDiv.classList.add("store-div")
 
@@ -921,13 +918,6 @@ function renderMap(stateObj) {
     endingPosition = (currentPosition > (screenwidthBlocks- mapSizeVal - 1))
     ? screenwidthBlocks : currentPosition + mapSizeVal + 1
   }
-  // console.log("current floor is " + currentFloor)
-  // console.log("starting floor is " + startingFloor)
-  // console.log("ending floor is " + endingFloor)
-  // console.log("current position is " + currentPosition)
-  // console.log("starting position is " + startingPosition)
-  // console.log("ending position is " + endingPosition)
-  
 
   stateObj.gameMap.forEach(async function (mapSquare, squareIndex) {
     let currentMapFloor = Math.floor(squareIndex / screenwidthBlocks)
@@ -1655,7 +1645,6 @@ function renderRouletteChoices(stateObj) {
 }
 
 function renderChoosingRelicToReplace(stateObj) {
-  console.log('inside choosing relic to replace')
   let storeDiv = document.createElement("Div")
   storeDiv.classList.add("store-div")
 
@@ -1687,7 +1676,6 @@ function renderChoosingRelicToReplace(stateObj) {
     swapRelicTextDiv.classList.add("centered")
 
     swapRelicDiv.onclick = async function () {
-      console.log("swapping relic at index " + i)
       await swapRelic(stateObj, i)
     }
     swapRelicDiv.append(swapRelicTitleDiv, swapImg, swapRelicTextDiv)
@@ -1725,8 +1713,74 @@ function renderChoosingRelicToReplace(stateObj) {
   scrapRelicButton.classList.add("centered")
   scrapRelicButton.classList.add("scrap-button-relic")
   scrapRelicButton.onclick = async function () {
-    console.log("scrapping the relic for cash")
       await scrapRelicForCash(stateObj, val)
+    }
+  
+  relicToSwapDiv.append(scrapRelicButton)
+
+  storeDiv.append(relicRowDiv, relicToSwapDiv)
+  storeDiv.classList.add("column")
+  return storeDiv
+}
+
+function renderChooseUpgradeRelic(stateObj) {
+  let storeDiv = document.createElement("Div")
+  storeDiv.classList.add("store-div")
+
+  let relicRowDiv = document.createElement("Div")
+  relicRowDiv.classList.add("relic-row-div")
+  relicRowDiv.classList.add("row")
+
+  
+  let rubyPrice = stateObj.floorValues[stateObj.currentLevel].rubyRelicPrice
+  let amethystPrice = stateObj.floorValues[stateObj.currentLevel].amethystRelicPrice
+
+
+  for (let i=0; i < stateObj.playerRelicArray.length; i++) {
+    if (stateObj.playerRelicArray[i].upgrades) {
+      let relic = stateObj.playerRelicArray[i]
+      let swapRelicDiv = document.createElement("Div")
+      swapRelicDiv.classList.add("swap-relic-div")
+      swapRelicDiv.classList.add("column")
+
+      if (stateObj.playerRelicArray[i].upgrades) {
+        let relicDivUpgradeString =  "bar-relic-upgrades-" + (stateObj.playerRelicArray[i].upgrades+1)
+        swapRelicDiv.classList.add(relicDivUpgradeString)
+      }
+      
+      let swapRelicTitleDiv = document.createElement("Div")
+      swapRelicTitleDiv.textContent = relic.name
+      swapRelicTitleDiv.classList.add("centered")
+
+      let swapImg = document.createElement('Img')
+      swapImg.classList.add("store-relic-img")
+      swapImg.src = relic.imgPath
+
+      let swapRelicTextDiv = document.createElement("Div")
+      let textString = "UPGRADE: " + relic.storeText(stateObj)
+      swapRelicTextDiv.textContent = textString
+      swapRelicTextDiv.classList.add("centered")
+
+      swapRelicDiv.onclick = async function () {
+        await upgradeRelic(stateObj, i)
+      }
+      swapRelicDiv.append(swapRelicTitleDiv, swapImg, swapRelicTextDiv)
+      relicRowDiv.append(swapRelicDiv)
+      } 
+  }
+  
+  let relicToSwapDiv = document.createElement("Div")
+  relicToSwapDiv.classList.add("relic-row-div")
+  relicToSwapDiv.classList.add("row")
+
+  let scrapRelicButton = document.createElement("Div")
+  let val = Math.floor(stateObj.floorValues[stateObj.currentLevel].storeRelicPrice/2)
+  let tradeString = "Don't upgrade any of these"
+  scrapRelicButton.textContent = tradeString
+  scrapRelicButton.classList.add("centered")
+  scrapRelicButton.classList.add("scrap-button-relic")
+  scrapRelicButton.onclick = async function () {
+      await viewSellingItems(stateObj)
     }
   
   relicToSwapDiv.append(scrapRelicButton)

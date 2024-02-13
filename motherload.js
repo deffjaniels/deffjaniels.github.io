@@ -39,6 +39,7 @@ let gameStartState = {
     choosingRoulette: false,
     choosingRelicToReplace: false,
     relicToChoose: false,
+    choosingRelicToUpgrade: false,
     
 
     currentInventory: 0,
@@ -54,7 +55,7 @@ let gameStartState = {
     blackDiamondInventory: 0,
     
 
-    bankedCash: 100000,
+    bankedCash: 100,
     ammo: 2,
     ammoBonus: 0,
     
@@ -96,7 +97,7 @@ let gameStartState = {
     rubyIncrease: 0,
     overallHullModifier: 1,
     overallFuelModifier: 1,
-    playerRelicArray: [spareTank, fuelMult, hullMult, laserRecaptureRelic, dirtRefiller],
+    playerRelicArray: [],
     storeUpgradeArray: [],
     fishEyeLens: false,
 
@@ -489,7 +490,8 @@ async function moveEnemies() {
     stateObj.timeCounter += 1
     await updateState(stateObj)
     if (!stateObj.inStore && !stateObj.choosingRobot && !stateObj.choosingNextLevel && !stateObj.sellingItems  
-        && !stateObj.viewingInventory && !stateObj.startTheGame  && !stateObj.choosingRoulette  && !stateObj.lostTheGame && !stateObj.choosingRelicToReplace) {
+        && !stateObj.viewingInventory && !stateObj.startTheGame  && !stateObj.choosingRoulette  && !stateObj.lostTheGame 
+        && !stateObj.choosingRelicToReplace && !stateObj.choosingRelicToUpgrade) {
 
         stateObj = await immer.produce(stateObj, (newState) => {
             if (newState.takingDamage !== false) {
@@ -659,34 +661,36 @@ async function renderScreen(stateObj) {
 
     let storeDiv = false;
     let addTopBar = false
-    if (stateObj.lostTheGame === true) {
+    if (stateObj.lostTheGame) {
         storeDiv = lostTheGame()
-    } else if (stateObj.wonTheGame === true) {
+    } else if (stateObj.wonTheGame) {
         storeDiv = wonTheGame(stateObj)
-    } else if (stateObj.choosingRobot === true) {
+    } else if (stateObj.choosingRobot) {
         storeDiv = chooseRobot(stateObj)
-    } else if (stateObj.startTheGame === true) {
+    } else if (stateObj.startTheGame) {
         storeDiv = renderStart(stateObj)
-    } else if (stateObj.sellingItems === true) {
+    } else if (stateObj.sellingItems) {
         storeDiv = renderSellingItems(stateObj)
         addTopBar = true;
-    } else if (stateObj.viewingInventory === true) {
+    } else if (stateObj.viewingInventory) {
         addTopBar = true;
         storeDiv = renderInventory(stateObj)
-    } else if (stateObj.choosingNextLevel === true) {
+    } else if (stateObj.choosingNextLevel) {
         addTopBar = true;
         storeDiv = renderNextLevelChoice(stateObj)
-    } else if (stateObj.inStore === true) {
+    } else if (stateObj.inStore) {
         addTopBar = true;
         storeDiv = renderStore(stateObj)
-    } else if (stateObj.choosingRoulette === true) {
+    } else if (stateObj.choosingRoulette) {
         addTopBar = true;
         storeDiv = renderRouletteChoices(stateObj)
-    } else if (stateObj.choosingRelicToReplace === true) {
-        console.log("choosing relic to replace")
+    } else if (stateObj.choosingRelicToReplace) {
         addTopBar = true;
         storeDiv = renderChoosingRelicToReplace(stateObj)
-    }else if (stateObj.inStore === false && stateObj.choosingNextLevel === false) {
+    } else if (stateObj.choosingRelicToUpgrade) {
+        addTopBar = true;
+        storeDiv = renderChooseUpgradeRelic(stateObj)
+    } else if (stateObj.inStore === false && stateObj.choosingNextLevel === false) {
         addTopBar = true;
         storeDiv = renderMap(stateObj)
     }
@@ -769,6 +773,7 @@ async function chooseRobot5(stateObj) {
 async function viewStore(stateObj) {
     stateObj.inStore = true;
     stateObj.sellingItems = false;
+
     await changeState(stateObj);
 }
 
@@ -1246,10 +1251,19 @@ async function killEnemiesStoreFunc(stateObj, value) {
     await changeState(stateObj);
 }
 
+async function viewSellingItems(stateObj) {
+    stateObj = await immer.produce(stateObj, async (newState) => {
+        newState.sellingItems = true;
+        newState.choosingRelicToUpgrade = false;
+    })
+    await changeState(stateObj);
+    return stateObj
+}
+
 killEnemiesStoreFunc
 
 async function upgradeStoreRelic(stateObj, index, rubyPrice=false, amethystPrice=false) {
-    stateObj = await stateObj.storeUpgradeArray[index].relicFunc(stateObj, false)
+    stateObj = await stateObj.storeUpgradeArray[index].relicFunc(stateObj)
     stateObj = immer.produce(stateObj, (newState) => {
         if (rubyPrice) {
             newState.rubyInventory -= rubyPrice
@@ -1261,6 +1275,28 @@ async function upgradeStoreRelic(stateObj, index, rubyPrice=false, amethystPrice
 
     })
     await pause(300)
+    await changeState(stateObj);
+}
+
+async function upgradeRelic(stateObj, index) {
+    stateObj = await stateObj.playerRelicArray[index].relicFunc(stateObj)
+    let rubyPrice = stateObj.floorValues[stateObj.currentLevel].rubyRelicPrice
+    let amethystPrice = stateObj.floorValues[stateObj.currentLevel].amethystRelicPrice
+    stateObj = immer.produce(stateObj, (newState) => {
+        newState.rubyInventory -= rubyPrice
+        newState.currentInventory -= rubyPrice
+        newState.amethystInventory -= amethystPrice
+        newState.currentInventory -= amethystPrice
+        newState.choosingRelicToUpgrade = false
+    })
+    await changeState(stateObj);
+}
+
+async function viewUpgradeRelic(stateObj) {
+    stateObj = immer.produce(stateObj, (newState) => {
+        newState.choosingRelicToUpgrade = true;
+        newState.sellingItems = false;
+    })
     await changeState(stateObj);
 }
 
@@ -1313,8 +1349,8 @@ document.addEventListener('keydown', async function(event) {
     let currentWidth = Math.floor(stateObj.currentPosition % stateObj.floorValues[stateObj.currentLevel].screenwidthBlocks)
     let scrollHeight = Math.floor(viewportHeight * 0.1);
     let scrollWidth = Math.floor(viewportWidth * 0.1);
-    if (stateObj.inTransition === false && stateObj.inStore === false && stateObj.viewingInventory===false 
-        && stateObj.choosingRobot === false && stateObj.choosingRoulette === false && stateObj.lostTheGame === false) {
+    if (!stateObj.inTransition && !stateObj.inStore && !stateObj.viewingInventory && !stateObj.choosingRobot 
+        && !stateObj.choosingRoulette  && !stateObj.lostTheGame && !stateObj.choosingRelicToReplace && !stateObj.choosingRelicToUpgrade) {
         if (event.key === 'ArrowUp' || event.key ==="w") {
             // Execute your function for the up arrow key
             stateObj = await UpArrow(stateObj, currentHeight, currentWidth, scrollHeight, scrollWidth);
@@ -1663,6 +1699,7 @@ function pause(timeValue) {
 async function sellItemsScreen(stateObj, emptyInv=false) {
     stateObj = await immer.produce(stateObj, async (newState) => {
         newState.sellingItems = true;
+        newState.choosingRelicToUpgrade = false;
     })
     return stateObj
 }
