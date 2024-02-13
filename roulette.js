@@ -81,19 +81,15 @@ let commonRouletteChoices = [
 
 let uncommonRouletteChoices = [
     weaponFill = {
-        name: "Weapon Refill",
+        name: "Ammo Drop",
         rarity: "uncommon",
         text:  (stateObj) => {
-            return "Randomly refill a bomb or laser"
+            return "Gain 1 ammo"
         },
         value: 1,
         rouletteFunc: async (stateObj, value) => {
             stateObj = immer.produce(stateObj, (newState) => {
-                if (stateObj.numberLasers < stateObj.laserCapacity) {
-                    stateObj.numberLasers += 1;
-                } else if (stateObj.bombCurrentTotal < stateObj.bombCapacity) {
-                    stateObj.bombCurrentTotal += 1
-                }
+                newState.ammo += 1
                 newState.choosingRoulette = false;
             })
             await changeState(stateObj);
@@ -181,7 +177,23 @@ let uncommonRouletteChoices = [
 ]
 
 let rareRouletteChoices = [
-
+    weaponFillRare = {
+        name: "Ammo Crate",
+        rarity: "rare",
+        text:  (stateObj) => {
+            return "Gain 3 ammo"
+        },
+        value: 1,
+        rouletteFunc: async (stateObj, value) => {
+            stateObj = immer.produce(stateObj, (newState) => {
+                newState.ammo += 3
+                newState.choosingRoulette = false;
+            })
+            await changeState(stateObj);
+            return stateObj
+        },
+        type: "weapon"
+    },
     gemthree = {
         name: "Valuable Ore +",
         rarity: "rare",
@@ -280,6 +292,23 @@ let rareRouletteChoices = [
 ]
 
 let legendaryRouletteChoices = [
+    weaponFillLegendary = {
+        name: "Ammo Depot",
+        rarity: "legendary",
+        text:  (stateObj) => {
+            return "Gain 6 ammo"
+        },
+        value: 1,
+        rouletteFunc: async (stateObj, value) => {
+            stateObj = immer.produce(stateObj, (newState) => {
+                newState.ammo += 6
+                newState.choosingRoulette = false;
+            })
+            await changeState(stateObj);
+            return stateObj
+        },
+        type: "weapon"
+    },
     tankthree = {
         name: "Fuel Tank ++++",
         rarity: "legendary",

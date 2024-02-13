@@ -1207,7 +1207,7 @@ let potentialRelics = [
                 newState.overallHullModifier += 0.5;
                 let index = newState.playerRelicArray.map(function(e) { return e.name; }).indexOf('Hull Multiplier');
                 if (index === -1) {
-                    newState.playerRelicArray.push(hulllMult)
+                    newState.playerRelicArray.push(hullMult)
                 } else {
                     newState.playerRelicArray[index].upgrades +=1
                 }
