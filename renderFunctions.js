@@ -1620,7 +1620,7 @@ function renderStore(stateObj) {
   
   
 
-  storeDiv.append(fuelSubDiv, hullSubDiv, weaponsSubDiv, relicsSubDiv, returnSellDiv, buyNothingDiv)
+  storeDiv.append(fuelSubDiv, hullSubDiv, relicsSubDiv, returnSellDiv, buyNothingDiv)
 
   return storeDiv
 }

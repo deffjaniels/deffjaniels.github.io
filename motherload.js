@@ -52,8 +52,9 @@ let gameStartState = {
     blackDiamondInventory: 0,
     
 
-    bankedCash: 10000,
+    bankedCash: 100000,
     ammo: 2,
+    ammoBonus: 0,
     
     numberLasers: 1,
     laserCapacity: 2,
@@ -87,7 +88,7 @@ let gameStartState = {
     noDirtThreshold: false,
     magneticBlocks: false,
     bronzeSilverConverter: 0,
-    dirtRefillsWeapons: false,
+    dirtRefillsWeapons: 0,
     laserGemRefill: 0,
     efficientGoldConverter: false,
     rubyIncrease: 0,
@@ -1270,7 +1271,7 @@ async function craftAmmo(stateObj) {
     console.log("firing craftAmmo")
     if (stateObj.silverInventory > 0) {
         stateObj = immer.produce(stateObj, (newState) => {
-            newState.ammo += 1;
+            newState.ammo += (1 + stateObj.ammoBonus);
             newState.silverInventory -= 1
             newState.currentInventory -= 1
         })

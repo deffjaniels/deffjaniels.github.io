@@ -922,7 +922,7 @@ body:has(.store-clickable#store-inventory-upgrade-div:hover) #current-inv-bar  {
 
   .store-sub-div {
     height: 55vh;
-    width: 20vw;
+    width: 25vw;
     display: flex;
     flex-direction: column;
     justify-content: start;
