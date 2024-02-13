@@ -333,45 +333,6 @@ function renderSellingItems(stateObj) {
   
   let rubyPrice = stateObj.floorValues[stateObj.currentLevel].rubyRelicPrice
   let amethystPrice = stateObj.floorValues[stateObj.currentLevel].amethystRelicPrice
-  let tradeRelicRubyDiv = document.createElement("Div")
-  if (stateObj.storeRelic1) {
-    tradeRelicRubyDiv.classList.add("ruby-relic-div")
-    tradeRelicRubyDiv.classList.add("column")
-    tradeRelicRubyDiv.classList.add("trade-relic-option")
-
-    let tradeDivTitle = document.createElement("Div")
-    tradeDivTitle.classList.add("centered")
-    tradeDivTitle.textContent = stateObj.storeRelic1.storeText(stateObj)
-
-    let tradeRubyImg = document.createElement("Img")
-    tradeRubyImg.classList.add("store-relic-img")
-    tradeRubyImg.src = stateObj.storeRelic1.imgPath
-
-    let costRubyDiv = document.createElement("Div")
-    costRubyDiv.classList.add("centered")
-    let costString = "Costs "
-
-    if (rubyPrice > 0) {
-      costString += rubyPrice + " rubies"
-      if (stateObj.rubyInventory >= rubyPrice) {
-        tradeRelicRubyDiv.classList.add("ruby-relic-hover")
-      }
-      tradeRelicRubyDiv.onclick = async function () {
-        await tradeRelicRuby(stateObj)
-      }
-    } else if (amethystPrice > 0) {
-      costString += amethystPrice + " amethysts"
-      if (stateObj.amethystInventory >= amethystPrice) {
-        tradeRelicRubyDiv.classList.add("diamond-relic-hover")
-        tradeRelicRubyDiv.onclick = async function () {
-          await tradeRelicRuby(stateObj)
-        }
-      }
-    }
-    costRubyDiv.textContent = costString
-
-    tradeRelicRubyDiv.append(tradeDivTitle, tradeRubyImg, costRubyDiv)
-  }
 
   let oreRelicDiv = document.createElement("Div")
   if (stateObj.storeRelic4) {
@@ -490,7 +451,7 @@ function renderSellingItems(stateObj) {
   let tradeRelicsDiv = document.createElement("Div")
   tradeRelicsDiv.classList.add("row")
   tradeRelicsDiv.classList.add("trade-relics-div")
-  tradeRelicsDiv.append(oreRelicDiv, tradeRelicRubyDiv, killEnemiesDiv)
+  tradeRelicsDiv.append(oreRelicDiv, killEnemiesDiv)
 
   let storeArr = stateObj.storeUpgradeArray
   for (let i=0; i < storeArr.length; i++) {
@@ -1690,6 +1651,88 @@ function renderRouletteChoices(stateObj) {
     }
     storeDiv.append(choice1Div)
   }
+  return storeDiv
+}
+
+function renderChoosingRelicToReplace(stateObj) {
+  console.log('inside choosing relic to replace')
+  let storeDiv = document.createElement("Div")
+  storeDiv.classList.add("store-div")
+
+  let relicRowDiv = document.createElement("Div")
+  relicRowDiv.classList.add("relic-row-div")
+  relicRowDiv.classList.add("row")
+
+  for (let i=0; i < stateObj.playerRelicArray.length; i++) {
+    let relic = stateObj.playerRelicArray[i]
+    let swapRelicDiv = document.createElement("Div")
+    swapRelicDiv.classList.add("swap-relic-div")
+    swapRelicDiv.classList.add("column")
+
+    if (stateObj.playerRelicArray[i].upgrades) {
+      let relicDivUpgradeString =  "bar-relic-upgrades-" + stateObj.playerRelicArray[i].upgrades
+      swapRelicDiv.classList.add(relicDivUpgradeString)
+    }
+    
+    let swapRelicTitleDiv = document.createElement("Div")
+    swapRelicTitleDiv.textContent = relic.name
+    swapRelicTitleDiv.classList.add("centered")
+
+    let swapImg = document.createElement('Img')
+    swapImg.classList.add("store-relic-img")
+    swapImg.src = relic.imgPath
+
+    let swapRelicTextDiv = document.createElement("Div")
+    swapRelicTextDiv.textContent = relic.text(stateObj)
+    swapRelicTextDiv.classList.add("centered")
+
+    swapRelicDiv.onclick = async function () {
+      console.log("swapping relic at index " + i)
+      await swapRelic(stateObj, i)
+    }
+    swapRelicDiv.append(swapRelicTitleDiv, swapImg, swapRelicTextDiv)
+    relicRowDiv.append(swapRelicDiv)
+  }
+  
+  let relicToSwapDiv = document.createElement("Div")
+  relicToSwapDiv.classList.add("relic-row-div")
+  relicToSwapDiv.classList.add("row")
+  let relic = stateObj.relicToChoose
+  let swapRelicDiv = document.createElement("Div")
+  swapRelicDiv.classList.add("swap-relic-div")
+  swapRelicDiv.classList.add("to-swap-relic-div")
+  swapRelicDiv.classList.add("column")
+
+  let swapRelicTitleDiv = document.createElement("Div")
+  swapRelicTitleDiv.textContent = relic.name
+  swapRelicTitleDiv.classList.add("centered")
+
+  let swapImg = document.createElement('Img')
+  swapImg.classList.add("store-relic-img")
+  swapImg.src = relic.imgPath
+
+  let swapRelicTextDiv = document.createElement("Div")
+  swapRelicTextDiv.textContent = relic.text(stateObj)
+  swapRelicTextDiv.classList.add("centered")
+
+  swapRelicDiv.append(swapRelicTitleDiv, swapImg, swapRelicTextDiv)
+  relicToSwapDiv.append(swapRelicDiv)
+
+  let scrapRelicButton = document.createElement("Div")
+  let val = Math.floor(stateObj.floorValues[stateObj.currentLevel].storeRelicPrice/2)
+  let tradeString = "Scrap this relic in exchange for $" + val
+  scrapRelicButton.textContent = tradeString
+  scrapRelicButton.classList.add("centered")
+  scrapRelicButton.classList.add("scrap-button-relic")
+  scrapRelicButton.onclick = async function () {
+    console.log("scrapping the relic for cash")
+      await scrapRelicForCash(stateObj, val)
+    }
+  
+  relicToSwapDiv.append(scrapRelicButton)
+
+  storeDiv.append(relicRowDiv, relicToSwapDiv)
+  storeDiv.classList.add("column")
   return storeDiv
 }
   

@@ -21,6 +21,9 @@ let potentialRelics = [
             await changeState(stateObj);
             return stateObj
         },
+        resetFunc: async (stateObj) => {
+            return stateObj
+        },
         rarity: "common",
         imgPath: "img/relics/stoprelic.png",
         levelRelic: true,
@@ -52,6 +55,13 @@ let potentialRelics = [
             await changeState(stateObj);
             return stateObj
         },
+        resetFunc: async (stateObj) => {
+            stateObj = immer.produce(stateObj, (newState) => {
+                newState.remoteBombs = false;
+            })
+            await changeState(stateObj);
+            return stateObj
+        },
         imgPath: "img/relics/remotebomb.png",
         levelRelic: true,
         shopRelic: true,
@@ -78,6 +88,13 @@ let potentialRelics = [
             stateObj = immer.produce(stateObj, (newState) => {
                 newState.thorns = true;
                 newState.playerRelicArray.push(thornsRelic)
+            })
+            await changeState(stateObj);
+            return stateObj
+        },
+        resetFunc: async (stateObj) => {
+            stateObj = immer.produce(stateObj, (newState) => {
+                newState.thorns = false;
             })
             await changeState(stateObj);
             return stateObj
@@ -123,6 +140,13 @@ let potentialRelics = [
             await changeState(stateObj);
             return stateObj
         },
+        resetFunc: async (stateObj, add=true) => {
+            stateObj = await immer.produce(stateObj, (newState) => {
+                newState.spareFuelTank = 0;
+            })
+            await changeState(stateObj);
+            return stateObj
+        },
         imgPath: "img/fueltank.png",
         levelRelic: true,
         shopRelic: true,
@@ -152,6 +176,13 @@ let potentialRelics = [
                 } else {
                     newState.playerRelicArray[index].upgrades +=1
                 }
+            })
+            await changeState(stateObj);
+            return stateObj
+        },
+        resetFunc: async (stateObj, add=true) => {
+            stateObj = immer.produce(stateObj, (newState) => {
+                newState.goldMaxInventory = 0;
             })
             await changeState(stateObj);
             return stateObj
@@ -192,6 +223,13 @@ let potentialRelics = [
             await changeState(stateObj);
             return stateObj
         },
+        resetFunc: async (stateObj, add=true) => {
+            stateObj = immer.produce(stateObj, (newState) => {
+                newState.dirtToMaxFuel = 0;  
+            })
+            await changeState(stateObj);
+            return stateObj
+        },
         imgPath: "img/relics/dirtmaxfuel.png",
         levelRelic: true,
         shopRelic: false,
@@ -220,6 +258,13 @@ let potentialRelics = [
                 } else {
                     newState.playerRelicArray[index].upgrades +=1
                 }
+            })
+            await changeState(stateObj);
+            return stateObj
+        },
+        resetFunc: async (stateObj, add=true) => {
+            stateObj = immer.produce(stateObj, (newState) => {
+                newState.enemyDamageModifier = 1;
             })
             await changeState(stateObj);
             return stateObj
@@ -253,6 +298,13 @@ let potentialRelics = [
                 } else {
                     newState.playerRelicArray[index].upgrades +=1
                 }
+            })
+            await changeState(stateObj);
+            return stateObj
+        },
+        resetFunc: async (stateObj, add=true) => {
+            stateObj = immer.produce(stateObj, (newState) => {
+                newState.halfDamageFullFuel = 1;
             })
             await changeState(stateObj);
             return stateObj
@@ -291,13 +343,18 @@ let potentialRelics = [
             await changeState(stateObj);
             return stateObj
         },
+        resetFunc: async (stateObj, add=true) => {
+            stateObj = immer.produce(stateObj, (newState) => {
+                newState.bronzeSilverBonus = 0;
+            })
+            await changeState(stateObj);
+            return stateObj
+        },
         imgPath: "img/relics/bronzesilverbonus.png",
         levelRelic: true,
         shopRelic: true,
         upgrades: 1,
     },
-
-    
 
     craftMoreAmmo = {
         name: "Ammo Efficiency",
@@ -319,6 +376,26 @@ let potentialRelics = [
                 } else {
                     newState.playerRelicArray[index].upgrades +=1
                 }
+            })
+            await changeState(stateObj);
+            return stateObj
+        },
+        relicFunc: async (stateObj, add=true) => {
+            stateObj = immer.produce(stateObj, (newState) => {
+                newState.ammoBonus += 1;
+                let index = newState.playerRelicArray.map(function(e) { return e.name; }).indexOf('Ammo Efficiency');
+                if (index === -1) {
+                    newState.playerRelicArray.push(craftMoreAmmo)
+                } else {
+                    newState.playerRelicArray[index].upgrades +=1
+                }
+            })
+            await changeState(stateObj);
+            return stateObj
+        },
+        resetFunc: async (stateObj, add=true) => {
+            stateObj = immer.produce(stateObj, (newState) => {
+                newState.ammoBonus = 0;
             })
             await changeState(stateObj);
             return stateObj
@@ -356,6 +433,14 @@ let potentialRelics = [
             await changeState(stateObj);
             return stateObj
         },
+
+        resetFunc: async (stateObj, add=true) => {
+            stateObj = immer.produce(stateObj, (newState) => {
+                newState.killEnemiesHullModifier = 0;
+            })
+            await changeState(stateObj);
+            return stateObj
+        },
         imgPath: "img/relics/killhull.png",
         levelRelic: true,
         shopRelic: true,
@@ -385,6 +470,13 @@ let potentialRelics = [
                 } else {
                     newState.playerRelicArray[index].upgrades +=1
                 }
+            })
+            await changeState(stateObj);
+            return stateObj
+        },
+        resetFunc: async (stateObj, add=true) => {
+            stateObj = immer.produce(stateObj, (newState) => {
+                newState.killEnemiesForHealing = 0;
             })
             await changeState(stateObj);
             return stateObj
@@ -421,6 +513,13 @@ let potentialRelics = [
             await changeState(stateObj);
             return stateObj
         },
+        resetFunc: async (stateObj, add=true) => {
+            stateObj = immer.produce(stateObj, (newState) => {
+                newState.silverHealing = 0;
+            })
+            await changeState(stateObj);
+            return stateObj
+        },
         imgPath: "img/relics/silverhealing.png",
         levelRelic: true,
         shopRelic: true,
@@ -453,6 +552,13 @@ let potentialRelics = [
             await changeState(stateObj);
             return stateObj
         },
+        resetFunc: async (stateObj, add=true) => {
+            stateObj = immer.produce(stateObj, (newState) => {
+                newState.bronzeMaxHull = 0;
+            })
+            await changeState(stateObj);
+            return stateObj
+        },
         imgPath: "img/relics/bronzemaxhull.png",
         levelRelic: true,
         shopRelic: true,
@@ -472,6 +578,13 @@ let potentialRelics = [
             stateObj = immer.produce(stateObj, (newState) => {
                 newState.dirtRuby = true;
                 newState.playerRelicArray.push(dirtRubyRelic)
+            })
+            await changeState(stateObj);
+            return stateObj
+        },
+        resetFunc: async (stateObj, add=true) => {
+            stateObj = immer.produce(stateObj, (newState) => {
+                newState.dirtRuby = false;
             })
             await changeState(stateObj);
             return stateObj
@@ -516,6 +629,13 @@ let potentialRelics = [
             await changeState(stateObj);
             return stateObj
         },
+        resetFunc: async (stateObj, add=true) => {
+            stateObj = immer.produce(stateObj, (newState) => {
+                newState.bombDistance = 2;
+            })
+            await changeState(stateObj);
+            return stateObj
+        },
         imgPath: "img/relics/bombupgrader.png",
         levelRelic: true,
         shopRelic: true,
@@ -535,6 +655,13 @@ let potentialRelics = [
             stateObj = immer.produce(stateObj, (newState) => {
                 newState.laserPiercing = true;
                 newState.playerRelicArray.push(laserPiercingRelic)
+            })
+            await changeState(stateObj);
+            return stateObj
+        },
+        resetFunc: async (stateObj) => {
+            stateObj = immer.produce(stateObj, (newState) => {
+                newState.laserPiercing = false;
             })
             await changeState(stateObj);
             return stateObj
@@ -581,6 +708,13 @@ let potentialRelics = [
             await changeState(stateObj);
             return stateObj
         },
+        resetFunc: async (stateObj, add=true) => {
+            stateObj = immer.produce(stateObj, (newState) => {
+                newState.bombRefill = 0;
+            })
+            await changeState(stateObj);
+            return stateObj
+        },
         imgPath: "img/relics/bombrefill.png",
         levelRelic: true,
         shopRelic: true,
@@ -613,6 +747,13 @@ let potentialRelics = [
             await changeState(stateObj);
             return stateObj
         },
+        resetFunc: async (stateObj, add=true) => {
+            stateObj = immer.produce(stateObj, (newState) => {
+                newState.fuelToBlocks = 0;
+            })
+            await changeState(stateObj);
+            return stateObj
+        },
         imgPath: "img/relics/fueltoblocks.png",
         levelRelic: true,
         shopRelic: true,
@@ -641,6 +782,13 @@ let potentialRelics = [
                 } else {
                     newState.playerRelicArray[index].upgrades +=1
                 }
+            })
+            await changeState(stateObj);
+            return stateObj
+        },
+        resetFunc: async (stateObj, add=true) => {
+            stateObj = immer.produce(stateObj, (newState) => {
+                newState.dirtThresholdNeeded = 50
             })
             await changeState(stateObj);
             return stateObj
@@ -689,6 +837,13 @@ let potentialRelics = [
             await changeState(stateObj);
             return stateObj
         },
+        resetFunc: async (stateObj, add=true) => {
+            stateObj = immer.produce(stateObj, (newState) => {
+                newState.fuelTeleportCost = 0;
+            })
+            await changeState(stateObj);
+            return stateObj
+        },
         imgPath: "img/relics/teleporter.png",
         levelRelic: true,
         shopRelic: true,
@@ -708,6 +863,13 @@ let potentialRelics = [
             stateObj = immer.produce(stateObj, (newState) => {
                 newState.noDirtThreshold = true;
                 newState.playerRelicArray.push(dirtCompactor)
+            })
+            await changeState(stateObj);
+            return stateObj
+        },
+        resetFunc: async (stateObj) => {
+            stateObj = immer.produce(stateObj, (newState) => {
+                newState.noDirtThreshold = false;
             })
             await changeState(stateObj);
             return stateObj
@@ -742,6 +904,14 @@ let potentialRelics = [
             await changeState(stateObj);
             return stateObj
         },
+        resetFunc: async (stateObj) => {
+            stateObj = immer.produce(stateObj, (newState) => {
+                newState.magneticBlocks =  false
+            })
+            await changeState(stateObj);
+            return stateObj
+        },
+        
         imgPath: "img/relics/magnetblocks.png",
         levelRelic: true,
         shopRelic: false,
@@ -782,6 +952,13 @@ let potentialRelics = [
             await changeState(stateObj);
             return stateObj
         },
+        resetFunc: async (stateObj, add=true) => {
+            stateObj = immer.produce(stateObj, (newState) => {
+                newState.silverMaxFuel = 0;
+            })
+            await changeState(stateObj);
+            return stateObj
+        },
         imgPath: "img/relics/silvermaxfuel.png",
         levelRelic: true,
         shopRelic: true,
@@ -801,6 +978,13 @@ let potentialRelics = [
             stateObj = immer.produce(stateObj, (newState) => {
                 newState.bronzeSilverConverter += 1;
                 newState.playerRelicArray.push(bronzeSilverConverter)
+            })
+            await changeState(stateObj);
+            return stateObj
+        },
+        resetFunc: async (stateObj) => {
+            stateObj = immer.produce(stateObj, (newState) => {
+                newState.bronzeSilverConverter = 0;
             })
             await changeState(stateObj);
             return stateObj
@@ -844,6 +1028,13 @@ let potentialRelics = [
             await changeState(stateObj);
             return stateObj
         },
+        resetFunc: async (stateObj) => {
+            stateObj = immer.produce(stateObj, (newState) => {
+                newState.dirtRefillsWeapons = 0;
+            })
+            await changeState(stateObj);
+            return stateObj
+        },
         imgPath: "img/relics/dirtrefillsweapons.png",
         levelRelic: true,
         shopRelic: false,
@@ -878,6 +1069,13 @@ let potentialRelics = [
             await changeState(stateObj);
             return stateObj
         },
+        resetFunc: async (stateObj, add=true) => {
+            stateObj = immer.produce(stateObj, (newState) => {
+                newState.laserGemRefill = 0;
+            })
+            await changeState(stateObj);
+            return stateObj
+        },
         imgPath: "img/relics/laserrecapture.png",
         levelRelic: true,
         shopRelic: true,
@@ -897,6 +1095,13 @@ let potentialRelics = [
             stateObj = immer.produce(stateObj, (newState) => {
                 newState.efficientGoldConverter = true;
                 newState.playerRelicArray.push(efficientConverter)
+            })
+            await changeState(stateObj);
+            return stateObj
+        },
+        resetFunc: async (stateObj) => {
+            stateObj = immer.produce(stateObj, (newState) => {
+                newState.efficientGoldConverter = false;
             })
             await changeState(stateObj);
             return stateObj
@@ -925,8 +1130,15 @@ let potentialRelics = [
         },
         relicFunc: async (stateObj) => {
             stateObj = immer.produce(stateObj, (newState) => {
-                newState.rubyIncrease += 0.01;
+                newState.rubyIncrease += 0.02;
                 newState.playerRelicArray.push(rubyLocator)
+            })
+            await changeState(stateObj);
+            return stateObj
+        },
+        resetFunc: async (stateObj) => {
+            stateObj = immer.produce(stateObj, (newState) => {
+                newState.rubyIncrease = 0;
             })
             await changeState(stateObj);
             return stateObj
@@ -964,13 +1176,20 @@ let potentialRelics = [
             await changeState(stateObj);
             return stateObj
         },
+        resetFunc: async (stateObj, add=true) => {
+            stateObj = immer.produce(stateObj, (newState) => {
+                newState.overallFuelModifier = 1;
+            })
+            await changeState(stateObj);
+            return stateObj
+        },
         imgPath: "img/relics/overallfuelmod.png",
         levelRelic: true,
         shopRelic: true,
         upgrades: 1,
     },
 
-    hulllMult = {
+    hullMult = {
         name: "Hull Multiplier",
         varName: "rubyLocator",
         text: (stateObj) => {
@@ -996,6 +1215,13 @@ let potentialRelics = [
             await changeState(stateObj);
             return stateObj
         },
+        resetFunc: async (stateObj, add=true) => {
+            stateObj = immer.produce(stateObj, (newState) => {
+                newState.overallHullModifier = 1;
+            })
+            await changeState(stateObj);
+            return stateObj
+        },
         imgPath: "img/relics/overallhullmod.png",
         levelRelic: true,
         shopRelic: true,
@@ -1015,6 +1241,13 @@ let potentialRelics = [
             stateObj = immer.produce(stateObj, (newState) => {
                 newState.fishEyeLens = true;
                 newState.playerRelicArray.push(fishEyeRelic)
+            })
+            await changeState(stateObj);
+            return stateObj
+        },
+        resetFunc: async (stateObj) => {
+            stateObj = immer.produce(stateObj, (newState) => {
+                newState.fishEyeLens = false;
             })
             await changeState(stateObj);
             return stateObj

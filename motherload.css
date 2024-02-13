@@ -587,6 +587,46 @@ html, body {
   cursor: not-allowed;
 }
 
+.swap-relic-div, .to-swap-relic-div {
+  height: 30vh;
+  width: 15vw;
+  margin: 1vh;
+  padding: 0.5vh;
+  background: linear-gradient(to right, rgb(50, 201, 50) 0%, rgb(108, 238, 108) 20%, rgb(113, 232, 113) 40%, rgb(151, 238, 151) 70%, rgb(159, 245, 159) 75%, rgb(59, 216, 59));
+  transition: 0.5s all;
+  cursor: pointer;
+}
+
+.swap-relic-div:hover {
+  background: linear-gradient(to right, rgb(17, 69, 17) 0%, rgb(41, 90, 41) 20%, rgb(39, 80, 39) 40%, rgb(54, 86, 54) 70%, rgb(52, 81, 52) 75%, rgb(19, 70, 19));
+  color: white;
+}
+
+.to-swap-relic-div {
+  border: 1vh solid black;
+  height: 18vh;
+  width: 25vw;
+}
+
+.scrap-button-relic {
+  height: 18vh;
+  width: 11vw;
+  background: rgb(221, 55, 55);
+  color: black;
+  transition: 0.5s all;
+  cursor: pointer;
+  
+}
+
+.scrap-button-relic:hover {
+  background: rgb(138, 0, 0);
+  color: white;
+  height: 17vh;
+  width: 11vw;
+  border: 1vh solid rgb(203, 27, 27)
+
+}
+
 .sell-button, .ruby-relic-hover, .diamond-relic-hover, .choose-robot-button, .ore-relic-hover {
   width: 20vw;
   height: 5vh;
