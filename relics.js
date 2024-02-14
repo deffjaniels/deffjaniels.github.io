@@ -151,6 +151,7 @@ let potentialRelics = [
         levelRelic: true,
         shopRelic: true,
         upgrades: 1,
+        maxUpgrades: 20
 
     },
 
@@ -192,6 +193,7 @@ let potentialRelics = [
         levelRelic: true,
         shopRelic: true,
         upgrades: 1,
+        maxUpgrades: 20
     },
 
     
@@ -234,6 +236,7 @@ let potentialRelics = [
         levelRelic: true,
         shopRelic: false,
         upgrades: 1,
+        maxUpgrades: 20
     },
 
     enemiesDealLess = {
@@ -251,7 +254,7 @@ let potentialRelics = [
         },
         relicFunc: async (stateObj) => {
             stateObj = immer.produce(stateObj, (newState) => {
-                newState.enemyDamageModifier -= 0.25;
+                newState.enemyDamageModifier -= 0.2;
                 let index = newState.playerRelicArray.map(function(e) { return e.name; }).indexOf('Armor Plating');
                 if (index === -1) {
                     newState.playerRelicArray.push(enemiesDealLess)
@@ -273,6 +276,7 @@ let potentialRelics = [
         levelRelic: true,
         shopRelic: true,
         upgrades: 1,
+        maxUpgrades: 4
     },
 
     //5
@@ -291,7 +295,7 @@ let potentialRelics = [
         },
         relicFunc: async (stateObj) => {
             stateObj = immer.produce(stateObj, (newState) => {
-                newState.halfDamageFullFuel = newState.halfDamageFullFuel * 0.65;
+                newState.halfDamageFullFuel -= 0.3 ;
                 let index = newState.playerRelicArray.map(function(e) { return e.name; }).indexOf('Fuel-Powered Shield');
                 if (index === -1) {
                     newState.playerRelicArray.push(halfDamageFuel)
@@ -313,6 +317,7 @@ let potentialRelics = [
         levelRelic: true,
         shopRelic: true,
         upgrades: 1,
+        maxUpgrades: 3
     },
 
     
@@ -354,6 +359,7 @@ let potentialRelics = [
         levelRelic: true,
         shopRelic: true,
         upgrades: 1,
+        maxUpgrades: 20
     },
 
     craftMoreAmmo = {
@@ -403,6 +409,7 @@ let potentialRelics = [
         levelRelic: true,
         shopRelic: false,
         upgrades: 1,
+        maxUpgrades: 5,
         imgPath: "img/relics/gun1.png",
     },
 
@@ -445,6 +452,7 @@ let potentialRelics = [
         levelRelic: true,
         shopRelic: true,
         upgrades: 1,
+        maxUpgrades: 20
         
     },
 
@@ -485,6 +493,7 @@ let potentialRelics = [
         levelRelic: true,
         shopRelic: true,
         upgrades: 1,
+        maxUpgrades: 20
     },
 
     silverHealingRelic = {
@@ -524,6 +533,7 @@ let potentialRelics = [
         levelRelic: true,
         shopRelic: true,
         upgrades: 1,
+        maxUpgrades: 20
     },
 
     bronzeMaxHullRelic = {
@@ -563,6 +573,7 @@ let potentialRelics = [
         levelRelic: true,
         shopRelic: true,
         upgrades: 1,
+        maxUpgrades: 4
     },
 
     dirtRubyRelic = {
@@ -640,6 +651,7 @@ let potentialRelics = [
         levelRelic: true,
         shopRelic: true,
         upgrades: 1,
+        maxUpgrades: 3
     },
 
     laserPiercingRelic = {
@@ -719,6 +731,7 @@ let potentialRelics = [
         levelRelic: true,
         shopRelic: true,
         upgrades: 1,
+        maxUpgrades: 3
     },
 
     fuelToBlocksRelic = {
@@ -758,6 +771,7 @@ let potentialRelics = [
         levelRelic: true,
         shopRelic: true,
         upgrades: 1,
+        maxUpgrades: 3
     },
 
     upgradeDirtBlockRelic = {
@@ -797,6 +811,7 @@ let potentialRelics = [
         levelRelic: true,
         shopRelic: true,
         upgrades: 1,
+        maxUpgrades: 3
     },
 
     //20
@@ -848,6 +863,7 @@ let potentialRelics = [
         levelRelic: true,
         shopRelic: true,
         upgrades: 1,
+        maxUpgrades: 3
     },
 
     dirtCompactor = {
@@ -887,26 +903,26 @@ let potentialRelics = [
         }
     },
 
-    magneticBlocks = {
-        name: "Magetic Blocks",
-        varName: "magneticBlocks",
+    poisonBlocks = {
+        name: "Weaponized Dirt",
+        varName: "poisonBlocks",
         text: (stateObj) => {
-            return "Enemies stick to dropped dirt blocks"
+            return "Enemies die if they collide with a dropped dirt block"
         },
         storeText: (stateObj) => {
-            return "Enemies stick to dropped dirt blocks"
+            return "Enemies die if they collide with a dropped dirt block"
         },
         relicFunc: async (stateObj) => {
             stateObj = immer.produce(stateObj, (newState) => {
-                newState.magneticBlocks = true;
-                newState.playerRelicArray.push(magneticBlocks)
+                newState.poisonBlocks = true;
+                newState.playerRelicArray.push(poisonBlocks)
             })
             await changeState(stateObj);
             return stateObj
         },
         resetFunc: async (stateObj) => {
             stateObj = immer.produce(stateObj, (newState) => {
-                newState.magneticBlocks =  false
+                newState.poisonBlocks =  false
             })
             await changeState(stateObj);
             return stateObj
@@ -914,10 +930,10 @@ let potentialRelics = [
         
         imgPath: "img/relics/magnetblocks.png",
         levelRelic: true,
-        shopRelic: false,
+        shopRelic: true,
         upgrades: false,
         isAvailable: async (stateObj) => {
-            if (stateObj.magneticBlocks) {
+            if (stateObj.poisonBlocks ) {
                 return false
             } else {
                 return true
@@ -963,6 +979,7 @@ let potentialRelics = [
         levelRelic: true,
         shopRelic: true,
         upgrades: 1,
+        maxUpgrades: 3
     },
 
     bronzeSilverConverter = {
@@ -1039,6 +1056,7 @@ let potentialRelics = [
         levelRelic: true,
         shopRelic: false,
         upgrades: 1,
+        maxUpgrades: 2
     },
 
     laserRecaptureRelic = {
@@ -1080,6 +1098,7 @@ let potentialRelics = [
         levelRelic: true,
         shopRelic: true,
         upgrades: 1,
+        maxUpgrades: 3
     },
 
     efficientConverter = {
@@ -1147,6 +1166,7 @@ let potentialRelics = [
         levelRelic: true,
         shopRelic: false,
         upgrades: 1,
+        maxUpgrades: 2
     },
 
     //30
@@ -1187,6 +1207,7 @@ let potentialRelics = [
         levelRelic: true,
         shopRelic: true,
         upgrades: 1,
+        maxUpgrades: 4
     },
 
     hullMult = {
@@ -1226,6 +1247,7 @@ let potentialRelics = [
         levelRelic: true,
         shopRelic: true,
         upgrades: 1,
+        maxUpgrades: 4
     },
 
     fishEyeRelic = {
@@ -1279,6 +1301,6 @@ function buildRelicArray(stateObj) {
             }
         }
     }
-    //tempArray = [ spareTank, spareTank, spareTank, goldMaxInventory, goldMaxInventory, goldMaxInventory, goldMaxInventory]
+    //tempArray = [ poisonBlocks, poisonBlocks, poisonBlocks, poisonBlocks, poisonBlocks, poisonBlocks, poisonBlocks]
     return tempArray
 }

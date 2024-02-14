@@ -1278,3 +1278,7 @@ body:has(.store-clickable#store-inventory-upgrade-div:hover) #current-inv-bar  {
     height: auto;
     object-fit: cover;
   }
+
+  .poison-dirt {
+    filter: hue-rotate(220deg)
+  }

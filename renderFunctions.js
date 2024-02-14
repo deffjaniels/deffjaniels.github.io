@@ -961,12 +961,17 @@ function renderMap(stateObj) {
           mapSquareImg.src = "img/map/stone.png"
           mapSquareDiv.append(mapSquareImg)
       }
-      
-      if (mapSquare === "0" || mapSquare === "magnetic-0") {
+
+
+      if (mapSquare === "poison-0" || mapSquare === "poison-4") {
+          mapSquareDiv.classList.add("poison-dirt")
+      } 
+      if (mapSquare === "0" || mapSquare === "poison-0") {
           mapSquareDiv.classList.add("dirt")
           let mapSquareImg = document.createElement("Img");
           mapSquareImg.classList.add("dirt-img")
           mapSquareImg.src = "img/map/dirt.png"
+          if (mapSquare === "poison-0") { mapSquareImg.classList.add("poison-dirt")}
           mapSquareDiv.append(mapSquareImg)
       } else if (mapSquare === "empty") {
           mapSquareDiv.classList.add("empty")
@@ -1003,6 +1008,7 @@ function renderMap(stateObj) {
           let mapSquareImg = document.createElement("Img");
           mapSquareImg.classList.add("ruby-img")
           mapSquareImg.src = "img/map/ruby.png"
+          if (mapSquare === "poison-4") { mapSquareImg.classList.add("poison-dirt")}
           mapSquareDiv.append(mapSquareImg)
       } else if (mapSquare === "5") {
           mapSquareDiv.classList.add("amethyst")

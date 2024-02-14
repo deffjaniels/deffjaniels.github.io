@@ -90,6 +90,7 @@ let gameStartState = {
     fuelTeleportCost: 0,
     noDirtThreshold: false,
     magneticBlocks: false,
+    poisonBlocks: false,
     bronzeSilverConverter: 0,
     dirtRefillsWeapons: 0,
     laserGemRefill: 0,
@@ -517,8 +518,10 @@ async function moveEnemies() {
                             })
                         } else {
                             stateObj = await immer.produce(stateObj, (newState) => {
-                                if (stateObj.gameMap[k-1] === "magnetic-0" || stateObj.gameMap[k-1] === "magnetic-4") {
-                                    newState.enemyMovementArray[i] = "frozen"
+                                if (stateObj.gameMap[k-1] === "poison-0" || stateObj.gameMap[k-1] === "poison-4") {
+                                    newState.gameMap[k] = "empty"
+                                    newState.enemyArray.splice(i, 1)
+                                    newState.enemyMovementArray.splice(i, 1)
                                 } else {
                                     newState.enemyMovementArray[i] = "right";
                                 }
@@ -539,8 +542,10 @@ async function moveEnemies() {
                             })
                         } else {
                             stateObj = await immer.produce(stateObj, (newState) => {
-                                if (stateObj.gameMap[k+1] === "magnetic-0" || stateObj.gameMap[k+1] === "magnetic-4") {
-                                    newState.enemyMovementArray[i] = "frozen"
+                                if (stateObj.gameMap[k+1] === "poison-0" || stateObj.gameMap[k+1] === "poison-4") {
+                                    newState.gameMap[k] = "empty"
+                                    newState.enemyArray.splice(i, 1)
+                                    newState.enemyMovementArray.splice(i, 1)
                                 } else {
                                     newState.enemyMovementArray[i] = "left";
                                 }
@@ -1221,7 +1226,6 @@ async function buyRelic3Func(stateObj, relicPrice) {
 async function buyRelic4Func(stateObj) {
     if (stateObj.playerRelicArray.length < 5) {
         stateObj = await stateObj.storeRelic4.relicFunc(stateObj)
-        stateObj = await stateObj.storeRelic2.relicFunc(stateObj)
         stateObj = immer.produce(stateObj, (newState) => {
             newState.storeRelic4 = false;
         })
@@ -1549,7 +1553,7 @@ async function calculateMoveChange(stateObj, squaresToMove) {
 
     //check if target square has an enemy nearby
     
-    if (targetSquare === "0" || targetSquare === "magnetic-0") {
+    if (targetSquare === "0" || targetSquare === "poison-0") {
         stateObj = await handleSquare(stateObj, targetSquareNum, 2)   
     } else if (targetSquare === "1") {
         if ((stateObj.currentInventory) < stateObj.inventoryMax) { 
@@ -1603,7 +1607,7 @@ async function calculateMoveChange(stateObj, squaresToMove) {
                 }
             })
         } 
-    } else if (targetSquare === "4" || targetSquare === "magnetic-4") {
+    } else if (targetSquare === "4" || targetSquare === "poison-4") {
         stateObj = await handleSquare(stateObj, targetSquareNum, 2)
         if ((stateObj.currentInventory) < stateObj.inventoryMax) { 
             stateObj = await immer.produce(stateObj, (newState) => {
@@ -2123,6 +2127,9 @@ async function dropBlock(stateObj) {
     if (stateObj.gameMap[stateObj.currentPosition + stateObj.floorValues[stateObj.currentLevel].screenwidthBlocks] === "empty") {
         if (stateObj.dirtReserves >= stateObj.dirtThresholdNeeded || (stateObj.fuelToBlocks > 0) &&  stateObj.currentFuel > Math.floor((dirtNeeded)/stateObj.fuelToBlocks)) {
             let mapText = (stateObj.magneticBlocks) ? "magnetic-" : ""
+            if (stateObj.poisonBlocks) {
+                mapText = "poison-" 
+            }
             if (stateObj.dirtRuby === true) {
                 mapText += "4"
             } else {
