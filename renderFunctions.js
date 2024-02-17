@@ -375,7 +375,7 @@ function renderSellingItems(stateObj) {
     let currentEnemies = stateObj.gameMap.filter(str => str === "enemy")
     
     let tradeDiv1 = document.createElement("Div")
-    let val = (1000*((stateObj.currentLevel+1)*2) * (stateObj.currentLevel+1))
+    let val = (500*((stateObj.currentLevel+1)*2) * (stateObj.currentLevel+1))
     let tradeString = "Earn $" + val
     tradeDiv1.textContent = tradeString
     tradeDiv1.classList.add("centered")
@@ -1659,33 +1659,35 @@ function renderChoosingRelicToReplace(stateObj) {
   relicRowDiv.classList.add("row")
 
   for (let i=0; i < stateObj.playerRelicArray.length; i++) {
-    let relic = stateObj.playerRelicArray[i]
-    let swapRelicDiv = document.createElement("Div")
-    swapRelicDiv.classList.add("swap-relic-div")
-    swapRelicDiv.classList.add("column")
-
-    if (stateObj.playerRelicArray[i].upgrades) {
-      let relicDivUpgradeString =  "bar-relic-upgrades-" + stateObj.playerRelicArray[i].upgrades
-      swapRelicDiv.classList.add(relicDivUpgradeString)
+    if (i < 5) {
+      let relic = stateObj.playerRelicArray[i]
+      let swapRelicDiv = document.createElement("Div")
+      swapRelicDiv.classList.add("swap-relic-div")
+      swapRelicDiv.classList.add("column")
+  
+      if (stateObj.playerRelicArray[i].upgrades) {
+        let relicDivUpgradeString =  "bar-relic-upgrades-" + stateObj.playerRelicArray[i].upgrades
+        swapRelicDiv.classList.add(relicDivUpgradeString)
+      }
+      
+      let swapRelicTitleDiv = document.createElement("Div")
+      swapRelicTitleDiv.textContent = relic.name
+      swapRelicTitleDiv.classList.add("centered")
+  
+      let swapImg = document.createElement('Img')
+      swapImg.classList.add("store-relic-img")
+      swapImg.src = relic.imgPath
+  
+      let swapRelicTextDiv = document.createElement("Div")
+      swapRelicTextDiv.textContent = relic.text(stateObj)
+      swapRelicTextDiv.classList.add("centered")
+  
+      swapRelicDiv.onclick = async function () {
+        await swapRelic(stateObj, i)
+      }
+      swapRelicDiv.append(swapRelicTitleDiv, swapImg, swapRelicTextDiv)
+      relicRowDiv.append(swapRelicDiv)
     }
-    
-    let swapRelicTitleDiv = document.createElement("Div")
-    swapRelicTitleDiv.textContent = relic.name
-    swapRelicTitleDiv.classList.add("centered")
-
-    let swapImg = document.createElement('Img')
-    swapImg.classList.add("store-relic-img")
-    swapImg.src = relic.imgPath
-
-    let swapRelicTextDiv = document.createElement("Div")
-    swapRelicTextDiv.textContent = relic.text(stateObj)
-    swapRelicTextDiv.classList.add("centered")
-
-    swapRelicDiv.onclick = async function () {
-      await swapRelic(stateObj, i)
-    }
-    swapRelicDiv.append(swapRelicTitleDiv, swapImg, swapRelicTextDiv)
-    relicRowDiv.append(swapRelicDiv)
   }
   
   let relicToSwapDiv = document.createElement("Div")

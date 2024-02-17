@@ -8,14 +8,14 @@ let gameStartState = {
     score: 0,
     lossString: false,
 
-    currentFuel: 150,
-    fuelTankMax: 150,
+    currentFuel: 100,
+    fuelTankMax: 120,
     fuelUpgrades: 0,
-    fuelUpgradeCost: 1500,
+    fuelUpgradeCost: 1000,
 
     currentHullArmor: 100,
     hullArmorMax: 100,
-    hullUpgradeCost: 1500,
+    hullUpgradeCost: 1000,
     takingDamage: false,
 
     //bounties
@@ -45,7 +45,7 @@ let gameStartState = {
     currentInventory: 0,
     inventoryMax: 12,
     inventoryUpgrades: 0,
-    inventoryUpgradeCost: 1000,
+    inventoryUpgradeCost: 750,
     bronzeInventory: 0,
     silverInventory: 0,
     goldInventory: 0,
@@ -157,80 +157,85 @@ let gameStartState = {
     totalLevelEnemies: 0,
     floorValues: [
         {
-            barVals: [1, 1, 1, 0.999, 0.995, 0.95, 0.80],
+            barVals: [1, 1, 1, 0.999, 0.99, 0.95, 0.8],
             //barVals: [0.99, 0.97, 0.91, 0.85, 0.77, 0.73, 0.7],
             enemyValue: 0.98,
             bottomRowEnemies: [1, 5, 9],
-            numberRows: 20,
+            numberRows: 15,
             relicNumber: 1,
             floorNumber: 0,
-            storeRelicPrice: 2500,
-            rubyRelicPrice: 3,
+            storeRelicPrice: 1500,
+            rubyRelicPrice: 2,
             amethystRelicPrice: 0,
             hullGoldUpgradePrice: 5,
             rubyHullUpgradePrice: 0,
-            screenwidthBlocks: 12,
+            screenwidthBlocks: 13,
             potentialRelicUpgrades: 0,
+            isRoulette: 0.985,
         },
         {
-            barVals: [1, 0.9995, 0.998, 0.995, 0.975, 0.9, 0.85],
+            barVals: [1, 0.999, 0.99, 0.975, 0.95, 0.9, 0.8],
             enemyValue: 0.965,
-            numberRows: 30,
+            numberRows: 20,
             bottomRowEnemies: [0, 3, 7, 9],
             relicNumber: 1,
             floorNumber: 1,
             storeRelicPrice: 6000,
-            rubyRelicPrice: 5,
-            amethystRelicPrice: 0,
+            rubyRelicPrice: 0,
+            amethystRelicPrice: 2,
             hullGoldUpgradePrice: 10,
             rubyHullUpgradePrice: 0,
-            screenwidthBlocks: 14,
+            screenwidthBlocks: 13,
             potentialRelicUpgrades: 1,
+            isRoulette: 0.985,
         },
         {
             barVals: [1, 0.999, 0.995, 0.97, 0.9, 0.85, 0.8],
             enemyValue: 0.95,
-            numberRows: 40,
+            numberRows: 25,
             bottomRowEnemies: [1, 3, 5, 7],
             relicNumber: 1,
             floorNumber: 2,
-            storeRelicPrice: 11000,
+            storeRelicPrice: 20000,
             rubyRelicPrice: 0,
-            amethystRelicPrice: 2,
+            amethystRelicPrice: 5,
             hullGoldUpgradePrice: 0,
             rubyHullUpgradePrice: 5,
-            screenwidthBlocks: 16,
+            screenwidthBlocks: 14,
             potentialRelicUpgrades: 1,
+            isRoulette: 0.99,
         },
         {
             barVals: [0.9995, 0.995, 0.98, 0.95, 0.9, 0.8, 0.75],
             enemyValue: 0.935,
-            numberRows: 50,
-            screenwidthBlocks: 18,
+            numberRows: 30,
+            screenwidthBlocks: 15,
             bottomRowEnemies: [1, 2, 4, 5, 7],
             relicNumber: 1,
             floorNumber: 3,
-            storeRelicPrice: 25000,
+            storeRelicPrice: 40000,
             rubyRelicPrice: 0,
-            amethystRelicPrice: 5,
+            amethystRelicPrice: 10,
             hullGoldUpgradePrice: 0,
             rubyHullUpgradePrice: 10,
             potentialRelicUpgrades: 1,
+            isRoulette: 0.99,
         },
         {
             barVals: [0.995, 0.98, 0.95, 0.9, 0.85, 0.77, 0.75],
             enemyValue: 0.91,
-            numberRows: 70,
-            screenwidthBlocks: 20,
+            numberRows: 50,
+            screenwidthBlocks: 16,
             bottomRowEnemies: [1, 2, 4, 5, 7],
             relicNumber: 1,
             floorNumber: 4,
-            storeRelicPrice: 50000,
+            storeRelicPrice: 100000,
             rubyRelicPrice: 0,
-            amethystRelicPrice: 10,
+            amethystRelicPrice: 15,
             hullGoldUpgradePrice: 0,
             rubyHullUpgradePrice: 15,
             potentialRelicUpgrades: 1,
+            isRoulette: 0.99,
         },
         
     ],
@@ -300,7 +305,7 @@ async function ProduceBlockSquares(arrayObj, stateObj) {
             const isEnemy = Math.random()
             let enemyVal = (j < (stateObj.floorValues[stateObj.currentLevel].screenwidthBlocks*3)) ? 1 : floorObj.enemyValue
             let isRoulette = Math.random()
-            if (isRoulette > 0.99) {
+            if (isRoulette > stateObj.floorValues[stateObj.currentLevel].isRoulette) {
                 arrayObj.push("crate")
             } else {
                 if (isEnemy > enemyVal && (j % stateObj.floorValues[stateObj.currentLevel].screenwidthBlocks !== 0) && ((j+1) % stateObj.floorValues[stateObj.currentLevel].screenwidthBlocks !== 0) && j-1 !== chosenSquare) {
@@ -471,8 +476,6 @@ async function fillMapWithArray(stateObj) {
         newState.enemyMovementArray = tempEnemyMovementArray;
     })
     await updateState(stateObj)
-    console.log("enemy array is " + stateObj.enemyArray)
-    console.log("upgrade array is " + stateObj.storeUpgradeArray.length)
     return stateObj
 }
 
@@ -485,7 +488,6 @@ var enemyMovementTimer = setInterval(moveEnemies, 100); // 500 milliseconds (hal
 async function moveEnemies() {
     let stateObj = {...state}
     if (stateObj.timeCounter === 0) {
-        console.log("calling fillMap function")
         stateObj = await fillMapWithArray(stateObj)
     }
     stateObj.timeCounter += 1
@@ -877,22 +879,6 @@ async function convertDiamond(stateObj) {
 }
 
 
-async function buyRelic1(stateObj) {
-    let relicCost = 1000
-    if (stateObj.currentLevel > 0) {
-        relicCost *= ((stateObj.currentLevel+1)*3)
-    }
-    if (stateObj.bankedCash > relicCost) {
-        stateObj = immer.produce(stateObj, (newState) => {
-            newState.bankedCost -= relicCost
-            newState.choosingNextLevel = false;
-        })
-    }
-        
-    await changeState(stateObj);
-}
-
-
 
 //------------------------------------------------------------------------------------
 //BETWEEN LEVEL CHOICES
@@ -1198,7 +1184,6 @@ async function buyRelic2Func(stateObj, relicPrice) {
 }
 
 async function buyRelic3Func(stateObj, relicPrice) {
-    console.log("relic array length is " + stateObj.playerRelicArray.length)
     if (stateObj.playerRelicArray.length < 5) {
         stateObj = await stateObj.storeRelic3.relicFunc(stateObj)
         stateObj = immer.produce(stateObj, (newState) => {
@@ -1207,7 +1192,6 @@ async function buyRelic3Func(stateObj, relicPrice) {
     
         })
     } else {
-        console.log("too many relics")
         stateObj = immer.produce(stateObj, (newState) => {
             newState.bankedCash -= relicPrice
             newState.relicToChoose = newState.storeRelic3 
@@ -1317,7 +1301,6 @@ async function buyLaser(stateObj) {
 }
 
 async function craftAmmo(stateObj) {
-    console.log("firing craftAmmo")
     if (stateObj.silverInventory > 0) {
         stateObj = immer.produce(stateObj, (newState) => {
             newState.ammo += (1 + stateObj.ammoBonus);
@@ -1879,7 +1862,6 @@ async function goToNextLevel(stateObj) {
         newState.splinterCellOn = false;
         newState.splinterCellModifier = 1;
         if (newState.currentLevel > 4) {
-            // console.log("current level is " + )
             newState.wonTheGame = true;
         }
 
@@ -2083,7 +2065,7 @@ async function detonateBlock(stateObj, blockPosition, isLaser=false) {
             }
 
             if (isLaser === false && stateObj.bombRefill > 0 && newState.bombCurrentTotal < newState.bombCapacity) {
-                newState.bombCurrentTotal += stateObj.bombRefill;
+                newState.ammo += stateObj.bombRefill;
             }
 
             if (isLaser === true && stateObj.laserGemRefill > 0 && newState.numberLasers < newState.laserCapacity)
@@ -2096,17 +2078,17 @@ async function detonateBlock(stateObj, blockPosition, isLaser=false) {
             if (newState.gameMap[blockPosition] === "stone-5") {
                 newState.gameMap[blockPosition] = "5"
                 if (isLaser === true && stateObj.laserGemRefill > 0 && newState.numberLasers < newState.laserCapacity) {
-                    newState.numberLasers += newState.laserGemRefill
+                    newState.ammo += newState.laserGemRefill
                 }
             } else if (newState.gameMap[blockPosition] === "stone-6") {
                 newState.gameMap[blockPosition] = "6"
                 if (isLaser === true && stateObj.laserGemRefill > 0 && newState.numberLasers < newState.laserCapacity) {
-                    newState.numberLasers += newState.laserGemRefill
+                    newState.ammo += newState.laserGemRefill
                 }
             } else if (newState.gameMap[blockPosition] === "stone-7") {
                 newState.gameMap[blockPosition] = "7"
                 if (isLaser === true && stateObj.laserGemRefill > 0 && newState.numberLasers < newState.laserCapacity) {
-                    newState.numberLasers += newState.laserGemRefill
+                    newState.ammo += newState.laserGemRefill
                 }
             } else {
                 newState.gameMap[blockPosition] = "exploding-1"

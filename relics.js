@@ -440,7 +440,6 @@ let potentialRelics = [
             await changeState(stateObj);
             return stateObj
         },
-
         resetFunc: async (stateObj) => {
             stateObj = immer.produce(stateObj, (newState) => {
                 newState.killEnemiesHullModifier = 0;
@@ -1298,9 +1297,11 @@ function buildRelicArray(stateObj) {
         } else {
             if (relic.isAvailable(stateObj)) {
                 tempArray.push(relic)
+            } else {
+                console.log(relic.name + " is not available to be in the level's relic array")
             }
         }
     }
-    //tempArray = [ poisonBlocks, poisonBlocks, poisonBlocks, poisonBlocks, poisonBlocks, poisonBlocks, poisonBlocks]
+    //tempArray = [ killEnemiesHullRelic, killEnemiesHullRelic, killEnemiesHullRelic, killEnemiesHullRelic, killEnemiesHullRelic, killEnemiesHullRelic, killEnemiesHullRelic]
     return tempArray
 }
